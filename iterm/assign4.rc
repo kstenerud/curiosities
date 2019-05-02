@@ -1,0 +1,191 @@
+/****************************************************************************
+Assign4.rc
+Resource file includes all resources
+
+
+*****************************************************************************/
+#include "resrcs.h"
+
+//Emu Communications executable menus
+ASSIGN4 MENU
+{
+  POPUP "&File"
+  {
+	 MENUITEM "&New", IDM_NEW
+	 MENUITEM "&Open...", IDM_OPEN, Grayed
+	 MENUITEM "&Save", IDM_SAVE, Grayed
+	 MENUITEM "Save &as...", IDM_SAVEAS, Grayed
+	 MENUITEM SEPARATOR
+	 MENUITEM "&Preferences", IDM_PREFERENCES
+	 MENUITEM SEPARATOR
+	 MENUITEM "E&xit", IDM_EXIT
+  }
+  POPUP "&Edit"
+  {
+	 MENUITEM "Cut\tCtrl-x", IDM_CUT, Grayed
+	 MENUITEM "Copy\tCtrl-c", IDM_COPY, Grayed
+	 MENUITEM "Paste\tCtrl-v", IDM_PASTE, Grayed
+	 MENUITEM "Clear\tCtrl-Delete", IDM_CLEAR, Grayed
+    MENUITEM "Select All", IDM_SELECTALL, Grayed
+  }
+
+  POPUP "E&mulation"
+  {
+	 MENUITEM "None", IDM_NONE
+	 MENUITEM "TVI950", IDM_TVI950, Grayed
+	 MENUITEM "VT100", IDM_VT100, Checked
+  }
+  POPUP "&Call"
+  {
+         MENUITEM "Dial...", IDM_DIAL
+	 MENUITEM "Connect", IDM_CONNECT
+	 MENUITEM "Disconnect", IDM_DISCONNECT, Grayed
+	 MENUITEM SEPARATOR
+	 MENUITEM "Echo On", IDM_ECHOON
+	 MENUITEM "Echo Off", IDM_ECHOOFF, Checked
+  }
+  POPUP "&Transfer"
+  {
+	 MENUITEM "Send File...", IDM_SENDFILE
+	 MENUITEM "Receive File...", IDM_RECEIVEFILE
+  }
+  POPUP "&Help"
+  {
+	 POPUP "Help Topics"
+	 {
+           MENUITEM "Making a call", IDM_HELP
+           MENUITEM "Connecting to the BCIT mainframe", IDM_HELP2
+	   MENUITEM "Receiving a file", IDM_HELP3
+	 }
+	 MENUITEM SEPARATOR
+    	 MENUITEM "About Terminal Emulator", IDM_ABOUT
+  }
+}
+
+//x_modem.rc
+
+IDD_XREC_DIALOG DIALOG 142, 50, 142, 130
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_THICKFRAME
+CAPTION "Xmodem Receive"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "Cancel", IDCANCEL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 44, 112, 50, 14
+ CONTROL "Blocks Received", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 16, 13, 60, 8
+ CONTROL "Errors", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 16, 30, 28, 8
+ CONTROL "", IDC_XREC_EDIT1, "static", SS_RIGHT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 84, 9, 44, 14
+ CONTROL "", IDC_XREC_EDIT2, "static", SS_RIGHT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 84, 30, 44, 13
+ CONTROL "", IDC_XREC_STATUSBAR, "static", SS_LEFT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 16, 90, 112, 13
+ CONTROL "Receive status", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 16, 77, 52, 9
+ CONTROL "Bytes received", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 16, 52, 56, 8
+ CONTROL "", IDC_XREC_EDIT3, "static", SS_RIGHT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 84, 52, 44, 12
+}
+
+IDD_XSEND_DIALOG DIALOG 107, 14, 155, 161
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "XModem Send"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "Cancel", IDCANCEL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 52, 142, 50, 14
+ CONTROL "Blocks sent", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 16, 30, 44, 9
+ CONTROL "Total Blocks", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 16, 9, 52, 9
+ CONTROL "Send status", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 12, 108, 48, 9
+ CONTROL "", IDC_XSEND_STATUSBAR, "static", SS_LEFT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 12, 119, 132, 13
+ CONTROL "", IDC_XSEND_EDIT1, "static", SS_LEFT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 72, 9, 52, 13
+ CONTROL "", IDC_XSEND_EDIT4, "static", SS_LEFT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 72, 73, 68, 13
+ CONTROL "Errors", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 16, 51, 40, 9
+ CONTROL "Last Error", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 16, 73, 44, 9
+ CONTROL "", IDC_XSEND_EDIT3, "static", SS_LEFT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 72, 51, 28, 14
+ CONTROL "", IDC_XSEND_EDIT2, "static", SS_LEFT | SS_SUNKEN | WS_CHILD | WS_VISIBLE | WS_BORDER, 72, 30, 52, 13
+}
+
+//about dialog box declaration
+about DIALOG 99, 55, 201, 99
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "About Terminal Emulator"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "X-Modem Send: Michael Gris", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 10, 120, 8
+ CONTROL "X-Modem Receive: Karl Stenerud", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 25, 120, 8
+ CONTROL "Interface and DLLs: Rudi Pfenniger", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 40, 120, 8
+ CONTROL "Documentation: Merja 'Sam' Gerbautz", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 55, 120, 8
+ CONTROL "Exit", IDCANCEL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 128, 72, 50, 14
+}
+
+//dial dialog box declaration
+dial DIALOG 99, 55, 201, 79
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Phone Number"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "Dial", ID_DIAL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 44, 52, 50, 14
+ CONTROL "Cancel", IDCANCEL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 108, 52, 50, 14
+ EDITTEXT ID_EB1, 12, 22, 176, 13, ES_LEFT | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP
+ CONTROL "Enter a phone number", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 12, 9, 124, 8
+}
+
+//port dialog box declaration
+port DIALOG 99, 55, 201, 89
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Com Port"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "Continue", ID_CONTINUE, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 44, 62, 50, 14
+ CONTROL "Cancel", IDCANCEL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 108, 62, 50, 14
+ LISTBOX ID_LB1, 12, 32, 176, 14, LBS_NOTIFY | WS_CHILD | WS_VISIBLE | WS_BORDER |
+	WS_VSCROLL | WS_TABSTOP
+ CONTROL "Select a Com Port by double clicking", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 12, 9, 124, 8
+ CONTROL "on your selection", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 12, 17, 124, 8
+}
+
+//help dialog box declaraction: making a call
+help1 DIALOG 99, 55, 201, 109
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Making a call"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "1. Select Preferences from the File Menu", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 10, 190, 8
+ CONTROL "2. Set the port settings", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 20, 190, 8
+ CONTROL "3. Select Dial from the Call Menu", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 30, 190, 8
+ CONTROL "4. Enter phone number and click on the dial button", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 40, 190, 8
+ CONTROL "Exit", IDCANCEL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 128, 85, 50, 14
+}
+
+//help dialog box declaraction: connecting to the BCIT mainframe
+help2 DIALOG 99, 55, 201, 109
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Connecting to the BCIT mainframe"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "1. Select Preferences from the File Menu", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 10, 190, 8
+ CONTROL "2. Set the port settings (9600, 7, EVEN, 1)", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 20, 190, 8
+ CONTROL "3. Select Connect from the Call Menu", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 30, 190, 8
+ CONTROL "4. Tap <ENTER> until the: ", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 40, 190, 8
+ CONTROL "     'Enter Terminal Type: '", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 50, 190, 8
+ CONTROL "    prompt appears", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 60, 190, 8
+ CONTROL "5. Type 'vt100' and press <ENTER>", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 70, 190, 8
+ CONTROL "Exit", IDCANCEL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 128, 85, 50, 14
+}
+
+//help dialog box declaraction: receiving a file
+help3 DIALOG 99, 55, 201, 109
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Receiving a File"
+FONT 8, "MS Sans Serif"
+{
+ CONTROL "1. Select the 'Receive File...' option", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 10, 190, 8
+ CONTROL "   from the Transfer Menu", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 20, 190, 8
+ CONTROL "2. Enter a name for the file", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 30, 190, 8
+ CONTROL "3. A dialog box will now display the ", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 40, 190, 8
+ CONTROL "     status of the file transfer", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 50, 190, 8
+ CONTROL "     including any errors that occur", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 10, 60, 190, 8
+ CONTROL "Exit", IDCANCEL, "BUTTON", BS_PUSHBUTTON | BS_CENTER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 128, 85, 50, 14
+}
+
+
+
+
+
+
+
+
+

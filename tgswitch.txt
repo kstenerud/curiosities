@@ -1,0 +1,229 @@
+      How to put a PC Engine / Turbo Grafx switch on your turbo grafx
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+By Karl Stenerud (mock@res.com) 29-Jun-96
+
+This document must be viewed in a monospaced font, 80 column format.
+
+
+
+DISCLAIMER:
+~~~~~~~~~~
+I take no responsibility for any damages incurred through the use of this
+document or its contents.  Use at your own risk.
+
+
+       MAKE SURE YOU READ THE ENTIRE DOCUMENT THROUGH BEFORE STARTING!
+             YOU WILL BE CUTTING CONNECTIONS ON YOUR MACHINE!
+
+
+
+INTRODUCTION:
+~~~~~~~~~~~~
+A few years ago, a friend of mine gave me his PC Engine.  I soon became
+obsessed with the thing and gradually acquired a Turbo Duo and a Turbo Express
+(as well as tonnes of games).  The only problem was that all my games were
+the japanese hucards, which didn't work in the american systems without some
+sort of converter unit, which I promptly bought.
+I soon learned to hate the thing since it would crash my game at the slightest
+nudge of the game converter (Very annoying since I liked to use my Turbo
+Express).  I soon became so frustrated that I took apart the game converter,
+found out what it did, and made a switch that would do it instead.
+MUCH BETTER!
+Anyway, if you hate the TV Game converter thingy for playing japanese hucards,
+and you know a little about electronics, this text is for you!
+
+
+
+THE THEORY:
+~~~~~~~~~~
+  All the TV Game Converter actually does is switch 8 pins like so:
+
+View the hucard connector so that the pins face towards you and the hucard
+socket faces away:
+
+
+                                  #     #  hucard socket unit
+                                  #     #  (top view)
+                                  #     #
+                                  #######
+                                  #######
+                                  ||||||| <- pins
+
+                 10                  20                  30              38
+                  |                   |                   |
+        |         |         |         |         |         |         |
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |
+* * * * * * * * * * * * * * * | | | | | * | | | * * * * * * * * * * * * * *
+                              | | | | |   | | |
+                        +-----+ | | | |   | | |
+                        |       | |  X    | | |
+                        | +-----+ | | |   | | |
+                        | |       | | |   | | |
+                        | | +-----+ | |   | | |
+                        | | |       | |   | | |
+                        | | |       | |   | | |
+                        | | |     +-|-|---+ | |
+                        | | |     | | |     | |
+                        | | |   +-|-|-|-----+ |
+                        | | |   | | | |       |
+                        | | | +-|-|-|-|-------+
+                        | | | | | | | |
+                        | | | | | | | |
+                        | | +-|-|-|-|-|-------+
+                        | |   | | | | |       |
+                        | +---|-|-|-|-|-----+ |
+                        |     | | | | |     | |
+                        +-----|-|-|-|-|---+ | |
+                              | | | | |   | | |
+* * * * * * * * * * * * * * * | | | | | * | | | * * * * * * * * * * * * * *
+| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |
+        |         |         |         |         |         |         |
+                  |                   |                   |
+                 10                  20                  30              38
+
+* these pins go straight through
+
+Note: the TV Game Converter has 2 extra pins on each side of the pcboard,
+      which are not used.  I am not counting these for the pin numbers.
+
+pins: 16 -> 24
+      17 -> 23
+      18 -> 22
+      19 -> 20
+      --------
+      20 -> 19
+      22 -> 18
+      23 -> 17
+      24 -> 16
+
+  Notice how the pin swapping is almost symmertrical, but not quite.  This
+is why you can't plug it into your PC Engine and play american games.
+It is, however, symmetrical enough to make our job all that much easier!
+
+
+
+BEFORE YOU BEGIN:
+~~~~~~~~~~~~~~~~
+1. Open up your machine.  Unfortunately, american companies like to rake the
+   customer big time, and so your machine likely has some strange screws in
+   it.  Someone on the turbo mailing list said they know where to get the
+   screw bits.  You could just take a phillips or robertson screwdriver and
+   try to take them off that way, but you risk stripping the screw heads.
+   Once they're off, get some normal screws to replace them.
+
+2. Locate the hucard socket unit.  It should look something like this:
+
+                            #     #  hucard socket unit
+                            #     #  (top view)
+                            #     #
+                            #######
+                            #######
+                            ||||||| <- pins
+
+3. Find a nice place to put a switch.  On the express, I found that the best
+   place is at the bottom of the machine next to the COM port.
+
+4. Decide how big the switch can be and still fit in there
+
+5. Decide how much wire you'll need.  You'll have 16 wires running from
+   wherever you decide to put the switch to the hucard socket in parallel.
+   This is where ribbon cable comes in real handy.  I just hacked up an old
+   SCSI cable.
+
+6. I strongly suggest you find out where to get a replacement hucard socket
+   unit in case something goes wrong.
+
+
+
+WHAT YOU NEED:
+~~~~~~~~~~~~~
+- A turbo grafx, duo, or express (duh!)
+- a soldering iron
+- solder
+- wire cutters
+- some thin, insulated electrical wire (I used and old SCSI cable)
+- a 8-pole, double-throw switch (is that the right way to say it? I keep
+                                 getting them mixed up)
+
+  The switch should look something like this on the bottom:
+          1      2      3      4     \     1      2      3      4
+        a b c  a b c  a b c  a b c   /   a b c  a b c  a b c  a b c
+        ###    ###    ###    ###     \     ###    ###    ###    ###
+                                     /
+        ###    ###    ###    ###     \     ###    ###    ###    ###
+        a b c  a b c  a b c  a b c   /   a b c  a b c  a b c  a b c
+          5      6      7      8     \     5      6      7      8
+                                     /
+        There are 8 individual       \   When you throw the switch,
+        "switches"                   /   8 contacts change the 8
+                                     \   "switches"
+
+  NOTE: This kind of switch is hard to find (Especially one small enough to
+        fit in the express).  I got one at a second hand electronics shop.
+
+
+
+LET'S HACK!:
+~~~~~~~~~~~
+1. Get your switch and solder small pieces of insulated wire, crossing
+   "a" on one switch and "c" on the opposite switch like so:
+
+                         1       2       3       4
+                      a  b c  a  b c  a  b c  a  b c
+                       \  /    \  /    \  /    \  /
+                        \/      \/      \/      \/
+                        /\      /\      /\      /\
+                       /  \    /  \    /  \    /  \
+                      a  b c  a  b c  a  b c  a  b c  
+                         5       6       7       8
+
+   NOTE: the crossing wires must NOT be connected to each other!
+
+*** STEP 2 IS THE POINT OF NO RETURN! ***
+
+2. Get your wire cutters and cut pins 16, 17, 18, 19, 20, 22, 23, 24 (NOT 21!)
+   on the hucard socket unit (see above, "THE THEORY").
+   Make sure you cut at the point where the pin bends down to connect to the
+   pcboard, so as to leave enough room to solder a wire to the pin.
+
+3. Get your soldering iron and desolder the connections of the pins you just
+   cut from the pcboard.
+
+4. Using the soldering iron and solder, connect the insulated wire from the
+   switch to the pins of the hucard socket unit like so:
+
+                 1            2            3            4
+             a   b   c    a   b   c    a   b   c    a   b   c
+                16l 16h      17l 17h      18l 18h      19l 19h
+
+
+                24l 24h      23l 23h      22l 22h      20l 20h
+             a   b   c    a   b   c    a   b   c    a   b   c
+                 5            6            7            8
+
+   where "l" ("low") is on the pcboard and "h" ("high") is on the pins of the
+   hucard socket unit.
+   ie. terminal "b" of switch 1 connects to 16h, which is pin 16 on the pins.
+       terminal "c" of switch 1 connects to 16l, which is pin 16 on the
+       pcboard.
+
+                         pins
+                          ||
+                          \/
+    
+                "high" -> ++--########   hucard socket unit
+                          ||  ########   (side view)
+                "low" -> -------------
+
+                         /\   /\   /\
+                         ||   ||   ||
+                           pcboard
+
+5. Mount the switch in your machine.  I cut a small hole in the bottom of my
+   express and mounted the switch using epoxy.
+
+6. Put your machine back together and test it out.  Switch one way for PC
+   Engine mode and the other way for Turbo Grafx mode.
+
+
+Congrats! You now have a pc-engine/turbo grafx switch!

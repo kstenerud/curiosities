@@ -1,0 +1,19 @@
+Quick instructions for stocknet Stock Ticker Server:
+
+To install:
+1. Extract stocknet: tar xzf stocknet.tgz
+2. Change dir to stockenet: cd stocknet
+3. Edit the Makefile and set the INSTALLDIR to whatever you like
+4. Type "make"
+5. When it's done, you can install by typing "make install"
+
+To make an administrator account:
+
+1. Go to the installed directory and type "./stocknet".  There are no command
+   line options.
+2. telnet to localhost port 9000.  When it asks for a name, type "admin".
+   ** admin is a special account that is not deleted after a game reset!
+   Type "Y" when it says "NEW?", then select a password.  When it sends a STAT
+   line, type "SHUTDOWN".
+3. Go to the "players" directory and edit the "admin" account.  set the last
+   0 to a 1. **Don't erase the NULs!!!

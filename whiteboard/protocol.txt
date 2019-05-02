@@ -1,0 +1,68 @@
+Multi-client extensions to the common whiteboard transfer protocol
+
+The multi-client extension supports all of the original functions, and
+adds a new packet type INIT_MULTI (0x10), which allows negotiation of multiple
+connections.
+
+The INIT_MULTI packet is subdivided into other packet types in the following
+manner:
+
+/---- Original Protocol ----\/---- 8 bits ---\/-- x bytes -\
+<LENGTH><(MULTI)(INIT_MULTI)><CONNECT REQUEST><REQUEST DATA>
+
+
+Connection requests are as follows:
+
+Legend: <SOMETHING(1)> means this operand is 1 byte long.
+        <SOMETHING(0-5)> means this operand can be from 0-5 bytes long.
+
+Code Data						Name
+~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~
+0x00 							REQUEST_SERVER
+
+We send this packet when we're trying to connect to the server.  The response
+to this will either be an I_AM_SERVER packet or a CONNECT_NAK packet with the
+server's IP.
+
+
+Code Data						Name
+~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~
+0x01 <MY_ID(1)><YOUR_ID(1)><NUM(1)><IP_DATA(0-2042)>	I_AM_SERVER
+
+Sent in response to a REQUEST_SERVER packet to tell them that we are the server
+and to tell them who else is connected.  MY_ID is the server's ID.  YOUR_ID is
+an ID that the server generates for the client.  IP_DATA is a series of 4-byte
+IP addresses in network order, and NUM is the number of IP addresses in the
+packet.
+
+
+Code Data						Name
+~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~
+0x02 <SERVER_IP(4)><MY_ID(1)>				CONNECT_REQUEST
+
+We has now connected to the server and want to connect to the clients the
+server told us about.  This message is sent to each client when we connect
+to them.  SERVER_IP is the IP address of who we think the server is.  MY_ID
+is the ID that the server gave us.
+The client will either respond with a CONNECT_ACK or a CONNECT_NAK.
+
+
+Code Data						Name
+~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~
+0x03 <MY_ID(1)>						CONNECT_ACK
+
+The client has the right info about the server and their ID is not already in
+use, so we respond with an acknowledge packet.  MY_ID is our ID so the client
+will know who we are.
+
+
+Code Data						Name
+~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~
+0x04 <SERVER_IP(4)>					CONNECT_NAK
+
+If the client is looking for the server, we send this packet back with SERVER_IP
+being the server's IP address so that the client can connect to the right
+server.
+If we're the server and we're full, we send this packet with SERVER_IP = 0.
+If there's a serious error that cannot be recovered from, we send this packet
+with SERVER_IP = 0.

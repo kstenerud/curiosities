@@ -1,0 +1,67 @@
+Draw 1.0 multi-client whiteboard
+
+
+WHO MADE IT:
+
+Karl Stenerud	- network & server layer
+Chris Torrens	- draw commands & user interface layer
+Mike Gray	- user interface layer
+Cam Mitchner	- draw commands & bridge between layers
+
+
+WHY:
+
+This was one of our term 4 projects at BCIT in the Data Communications option.
+
+
+WHAT IT IS:
+
+A whiteboard is a screen that allows a user to connect to another screen on
+another machine, draw on his screen, and have what he draws appear on the other
+side.
+
+
+OUR ENHANCEMENTS:
+
+We've made a few enhancements on the basic whiteboard model:
+
+-Multi client conferencing support:
+	Up to 5 people can "conference whiteboard" together using 5 different
+	machines. Each person's doodles will appear in a unique color to the
+	other machines.
+	Actually, the network base code supports up to 255 people, but it gets
+	hard to distinguish the colors at that point =).
+
+-Floating server with crash recovery:
+	Any "client" can act as a "server", so if the server were to go down,
+	the remaining clients will re-negotiate who is to take over as the new
+	server.
+	By default, the first "server" is whoever receives the first connection
+	from another client.
+
+-Shapes & text:
+	Not satisfied to stick to boring freehnad text, we added things such as
+	circles, rectangles, lines, & text.
+
+
+COMPILING:
+
+Edit the Makefile to your tastes.  In particular make sure to set the right
+compiler for your system.  Linux users with lesstif should be able to use the
+sgi settings for the Makefile.
+
+now type make
+
+
+RUNNING:
+
+run draw, click on Options/Connect, connect to someone else who is running
+whiteboard.  You will automatically be connected to whoever else they are
+connected to.
+
+Use the "colors" menu to select what color your doodles will appear as on your
+machine.
+
+Use the "draw commands" menu to select what draw command to do.
+Note: the "draw commands" menu for some reason gets changed to "palette"
+when using lesstif.

@@ -1,0 +1,34 @@
+#include "resource.h"
+
+INTRSOUTMENU MENU
+{
+	POPUP "&File"
+   {
+   	MENUITEM "&Exit", IDM_EXIT
+   }
+
+   POPUP "&Communicate"
+	{
+		MENUITEM "&Talk", IDM_TALK
+      MENUITEM "&Listen", IDM_LISTEN
+      MENUITEM "Stop T&alking", IDM_STOPTALK
+      MENUITEM "Stop L&istening", IDM_STOPLISTEN
+   }
+
+   POPUP "C&onnection"
+   {
+   	MENUITEM "Co&nnect", IDM_CONNECT
+      MENUITEM "&Disconnect", IDM_DISCONNECT
+      MENUITEM "&Remote Waves", IDM_GETREMOTEDIR
+   }
+}
+
+IPDIALOG DIALOG 50, 50, 100, 55
+CAPTION "Talk to Whom?"
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+{
+	DEFPUSHBUTTON	"OK", ID_OK, 56, 35, 37, 14, WS_CHILD | WS_VISIBLE | WS_TABSTOP
+	PUSHBUTTON	"Cancel", ID_CANCEL, 10, 35, 37, 14, WS_CHILD | WS_VISIBLE | WS_TABSTOP
+   LTEXT	"IP Address", -1, 10, 5, 60, 12
+   EDITTEXT ID_IPADDR, 10, 17, 60, 12, ES_LEFT | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP
+}

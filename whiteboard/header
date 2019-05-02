@@ -1,0 +1,24 @@
+//-----------------------------------------------------------------------------
+//FUNCTION:	
+//DATE:		May 6, 97
+//REVISION:	
+//DESIGNER:	Chris Torrens and Cam Mitchner
+//PROGRAMMER:	Chris Torrens and Cam Mitchner
+//INTERFACE:	
+//		 
+//              -display: pointer to the Display we are drawing to
+//              -mycanvas: window to draw to
+//              -mycurrentGC: current Graphics Context to use for drawing
+//              -data[]: data part of Common Whiteboard Transfer Protocol (CWTP)
+//               packet received.
+//              -len: length (16-bit words) of data packet (Max 128)
+//              -type: CWTP protocol operation 
+//RETURNS:	
+//DEPENDENCIES: calls get16Bit function and XWindow drawing functions
+//PRECONDITION: len, type and data[] must be valid CWTP protocol values
+//              no other functions can be accessing graphic object lists or
+//              startX,startY,lastX,lastY while this function is executing
+//NOTES:        decodes drawing operation type. decodes data portion of 
+//              message. Calls drawing function using decoded data. Stores
+//              drawn object in global object list.
+//-----------------------------------------------------------------------------

@@ -1,0 +1,1725 @@
+  It's amazing all the errors you can miss if you examine a program on the
+screen.  Long after sending out the first 2 units of my tutorial, and just
+before sending out unit 3, I decided to print them out.  It was surprising
+how many errors I found!  I have now corrected most of the errors, but I can't
+guarantee this text is 100% error free! =)
+The release date of this text is 09-Feb-93
+
+
+                   Amiga Assembly Language Tutorial:  Doc 1
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   So you want to learn assembly language.  Well, you've come to the right
+place!  As I write this text, I am currently learning the basics of assembly
+language programming.  Due to this fact, I don't know how long this tutorial
+will be upon completion.  So I've decided to release it in parts as I get around
+to writing them =)  Being a student of assembly, I am probably the most
+qualified to teach since I am just learning myself.  However, I have already
+programmed in basic and C, and so a certain amount of knowledge about program
+flow (how to write a program in any language) may be necessary.  I am trying
+to make this text useful to the absolute beginner, thus the name "intro to
+assembly", so if there's something you don't understand, PLEASE contact me!
+
+
+                            Unit 1: Number systems
+                            ~~~~~~~~~~~~~~~~~~~~~~
+Completed: 16-Sep-92
+
+1-1: Bases:
+~~~~~~~~~~~
+  A basic distinguishing feature of a number system is it's BASE.  The base
+indicates the number of characters or digits used to represent quantities in
+that number system.  The decimal system has a base of 10 because we use the 10
+digits 0 through 9 to represent quantities.  We usually use a subscript to show
+what base is being used.  To represent 352 in the decimal number system, we
+would put 352 with subscript 10.  Unfortunately, ASCII text does not allow the 
+use of subscripts, and so, in assembly language, we use special characters to 
+represent the base we are using.  To represent BINARY NUMBERS, the % character 
+is placed immediately before the number.  To represent HEXADECIMAL NUMBERS, 
+the $ character is used.  If no sign is used, the number is assumed to be 
+decimal (base 10).  These will be explained shortly.
+
+
+1-2: Base 10:
+~~~~~~~~~~~~~
+  In any number system, the position of a digit in a number will determine
+it's magnitude.  For example, in the number 61205, the digit 1 does not have
+the value 1, but of 1000. This can be shown in exponent form: 10^3  (^ means
+"to the power of").  The digit 6 can be represented by: 6 x 10^4 or 6 times
+10000. Refer to the table below:
+
+                  10^0 = 1  (anything to the power of 0 = 1)
+                  10^1 = 10
+                  10^2 = 100
+                  10^3 = 1000
+                  10^4 = 10 000
+                  10^5 = 100 000
+                  10^6 = 1 000 000
+                  and so on...
+
+  We can find the total value of the number by considering the specific
+magnitudes of the digits:
+
+          (6 x 10^4) + (1 x 10^3) + (2 x 10^2) + (0 x 10^1) + (5 x 10^0)
+        = (6 x 10000) + (1 x 1000) + (2 x 100) + (0 x 10) + (5 x 1)
+        = 60000 + 1000 + 200 + 0 + 5 
+        = 61205
+
+
+1-3: The binary number system:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The simplest number system that uses positional notation is the binary
+number system.  This number system has a base of 2 and so has only 2 digits: 0
+and 1. We use the % character to show we are using binary numbers.  Computers 
+understand only the binary system.  Each memory cell (called a bit, which is 
+short for Binary digIT) is considered to either be off or on (0 or 1).  The 
+binary system works in the same way as the decimal system as shown in the 
+example:
+
+          %1101
+        = (%1 x 2^3) + (%1 x 2^2) + (%0 x 2^1) + (%1 x 2^0)
+        = (1 x 8) + (1 x 4) + (0 x 2) + (1 x 1)
+        = 8 + 4 + 0 + 1 
+        = 13 base 10
+
+Example of powers of 2:
+
+                  2^0 = 1 base 10
+                  2^1 = 2 base 10
+                  2^2 = 4 base 10
+                  2^3 = 8 base 10
+                  2^4 = 16 base 10
+                  2^5 = 32 base 10
+                  2^6 = 64 base 10
+                  2^7 = 128 base 10
+                  2^8 = 256 base 10
+                  2^9 = 512 base 10
+                  2^10 = 1024 base 10
+                  and so on...
+
+
+1-4: Digit significance
+~~~~~~~~~~~~~~~~~~~~~~~
+  All numbers are put in a decending order of significance from high to low.
+For example, the number 5637 has a MOST SIGNIFICANT DIGIT of 5 and a LEAST
+SIGNIFICANT digit of 7.  The most significant digit is always to the left,
+and the least significant to the right.  In the binary system, we refer to
+the digits as bits, and so in the number %10110 base 2, the MOST SIGNIFICANT
+BIT (MSB) is %1 (on the left), and the LEAST SIGNIFICANT BIT (LSB) is %0 (on 
+the right).
+
+
+1-5: Converting decimal to binary
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  A decimal integer nimber can be converted to a different base through
+successive divisions by the desired base.  To convert a decimal number to
+binary, successively divide the number by 2 and note the remainders.  When
+you divide by 2, the remainder is always 1 or 0.  The remainders form the
+equivalent binary number.  For example, let's convert the decimal number 37
+to binary:
+
+           37/2 = 18  with remainder 1  <-- LSB
+           18/2 = 9                  0
+           9/2  = 4                  1
+           4/2  = 2                  0
+           2/2  = 1                  0
+           1/2  = 0                  1  <-- MSB
+
+Note the MSB should be on the left side, so 37 = %100101.
+
+
+1-6: Hexadecimal number system
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The third number system you will use in assembly language is the hexadecimal
+number system.  As the name implies, hexadecimal has a base of 16.  
+Hexadecimal numbers are represented by the character $.  Since we do not have 
+16 symbols to represent the unit values of this system, we use the letters A 
+to F to represent the missing symbols:
+
+1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F   (base 16)
+1  2  3  4  5  6  7  8  9  10 11 12 13 14 15  (base 10)
+
+  While this may seem a very strange number system to use, you will soon see
+why it is used.  Consider the table below:
+
+                | Decimal | Hexadecimal | Binary |
+                |     0   |      0      |      0 |
+                |     1   |      1      |      1 |
+                |     2   |      2      |     10 |
+                |     3   |      3      |     11 |
+                |     4   |      4      |    100 |
+                |     5   |      5      |    101 |
+                |     6   |      6      |    110 |
+                |     7   |      7      |    111 |
+                |     8   |      8      |   1000 |
+                |     9   |      9      |   1001 |
+                |    10   |      A      |   1010 |
+                |    11   |      B      |   1011 |
+                |    12   |      C      |   1100 |
+                |    13   |      D      |   1101 |
+                |    14   |      E      |   1110 |
+                |    15   |      F      |   1111 |
+                |    16   |     10      |  10000 |
+                |    17   |     11      |  10001 |
+                |    18   |     12      |  10010 |
+                |    19   |     13      |  10011 |
+                |    20   |     14      |  10100 |
+                |    21   |     15      |  10101 |
+                |    22   |     16      |  10110 |
+                |    23   |     17      |  10111 |
+                |    24   |     18      |  11000 |
+                |    25   |     19      |  11001 |
+                |    26   |     1A      |  11010 |
+                |    27   |     1B      |  11011 |
+                |    28   |     1C      |  11100 |
+                |    29   |     1D      |  11101 |
+                |    30   |     1E      |  11110 |
+                |    31   |     1F      |  11111 |
+                |    32   |     20      | 100000 |
+                
+  As you can see, the binary numbers match up quite nicely with the 
+hexadecimal numbers.
+
+  The next two headings deal with converting hexadecimal to decimal and vice
+versa.  However, I find converting hex numbers to decimal far too time-
+consuming, and so I would suggest that you obtain a calculator that will
+convert hex to decimal.
+
+
+1-7: Conversion from hexadecimal to decimal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  As with the other number systems, hexadecimal places digits in order of
+magnitude.  Because of this, you can use the previous decimal conversion
+method:
+
+          $7FE
+        = ($7 x 16^2) + ($F x 16^1) + ($E x 16^0)
+        = (7 x 16^2) + (15 x 16^1) + (14 x 16^0)
+        = (7 x 256) + (15 x 16) + (14 x 1)
+        = 1792 + 240 + 14 
+        = 2046
+
+1-8: Conversion from decimal to hexadecimal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  This conversion method uses the same method previously used to convert
+binary to decimal:
+
+      ex: 200
+          200/16 = 12 with remiander of 8 = $8 <-- LSD
+           12/16 = 0                   12 = $C <-- MSD
+
+           200 = $C8
+
+   examples of powers of 16:
+                  
+                  16^0 = 1
+                  16^1 = 16
+                  16^2 = 256
+                  16^3 = 4096
+                  16^4 = 65536
+                  16^5 = 1048576
+                  16^6 = 16777216
+
+
+1-9: Converting between hexadecimal and binary
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  At this point, you will now see the reasoning behind using the hexadecimal
+system. From this point on, I will shorten hexadecimal to it's shorthand hex.
+After examining the chart in 1-6, you may have noticed that the value $F 
+corresponds with %1111.  This means that 1 hex digit is represented by 4
+binary digits as 4 bits can represent any number from 0 to 15.  Because of 
+this, hex numbers can be emulated by sets of 4-digit binary numbers, as shown 
+in the following examples:
+
+       16^1 = 2^4   | ex:   $F = %1111
+       16^2 = 2^8   | ex:  $C4 = %11000100
+       16^3 = 2^12  | ex: $F33 = %111100110011
+
+  Notice how for every hex digit, there are 4 binary digits.  Now what would 
+happen if we were to separate the binary digits into 4-digit parts?
+
+                  $F34 = %111100110100
+                  $F 3 4  = %1111 0011 0100
+
+  Notice how $F = %1111, $3 = %0011, and $4 = %0100.  You can now see how easy
+it is to convert between hex and binary.  If you were to try the same with the
+decimal number system, you would get 9 = %1001, 10 = %1010, 11 = %1011 and so 
+on.  For this reason, hex has a considerable advantage over decimal.  Hex also
+makes it much easier to write to memory cells, which are made up of groups of
+8 bits (called bytes), and can hold values from $00 to $FF.  (This will be 
+discussed in the next unit)
+
+
+1-10: Representing negative numbers in binary:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  2's complement is a system used to allow the computer to represent negative
+numbers.  values #0000 0000 to 0111 1111 represent values from $00 to $7F.
+The values from #1000 0000 to #1111 1111 are used to represent negative
+numbers, where #1111 1111 represents -$01 and #1000 0000 represents -$80.
+As shown below, this is a very efficient method of representing negative
+numbers:
+
+              Binary     Decimal
+            #0000 0110      6
+          + #1111 1100     -4
+          -------------------
+          #1 0000 0010 
+        In this operation, the MSB is discarded, leaving #00000010 or 2.
+
+
+
+                  Unit 2: Introduction to Microprocessors
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Completed: 09-Oct-92
+
+   As an intro to assembly language, I am beginning with machine language.  
+The difference between assembly and machine language is that assembly has all 
+its commands as words, whereas in machine language, the commands must be given 
+in codes.  For example, the command ADD has a code of $88.  After introducing 
+the 6800 microprocessor I am using for demonstration purposes, I will 
+explain these differences further.
+
+
+2-1: Terminology
+~~~~~~~~~~~~~~~~
+  Before I begin explaining how the microcomputer works, a few terms must
+first be understood.
+
+  The MICROPROCESSOR is the 'brain' behind the system.  This device performs
+most of the data-manipulation.  I will be explaining all of the important
+internals of the microprocesor.
+
+  To give the microprocessor access to memory and outside information, a group
+of parallel conductors are connected to each device.  These conductors are
+called a BUS.
+
+A diagram will help my explanation:
+
+           |- - - - - - - - - - - - - - - - - - - - - -|
+
+           |           +-------------------+           |
+                       |Microprocessor Unit|
+           |      ||===|      (MPU)        |<=>||      |
+          Address ||   +-------------------+   || Data
+           |  Bus ||                           || Bus  |
+              >>>>||         +------+          ||<<<<
+           |      ||========>|Memory|<========>||      |
+                  ||         +------+          ||
+           |      ||                           ||      |
+                  ||   +-----------------+     ||
+           |      ||==>|Interface adaptor|<===>||      |
+                       +-----------------+
+           |               |I/O Port|                  |
+                           +--------+
+           |                   /\                      |
+                               ||
+           |- - - - - - - - - -|| - - - - - - - - - - -|
+                               ||
+                               \/
+                         +------------+
+                         |Input/Output|
+                         |   Device   |
+                         +------------+
+
+  The microprocessor connects to other devices such as memory or other
+external devices via a BUS.  An example of an external device would be a
+keyboard, a modem, a printer (output only), a screen (output only) etc.  There
+are two types of busses:  The ADDRESS BUS and the DATA BUS.  The address bus
+is a means by which the MPU tells all the external devices which one it wants
+to access.  The device will then respond by sending a code to the MPU via the
+data bus.   The I/O port (Input/Output port) lets the MPU connect with
+external devices.
+
+  The MEMORY of a computer is based on a series of "switches" or BITs, which
+have 2 possible states: on or off (0 or 1).  However, this is not a very
+useful way to count, and so the computer memory works using a unit called a
+BYTE, which is made of a group of 8 bits.  A byte can store 2^8 or 256 ($FF)
+possibilities.
+
+  If you are going to use negative numbers, then you can only store values
+half as large.  (ex a byte can store values from -127 to +127).
+
+
+2-2: The MicroProcessor Unit (MPU)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To make things easier, I will begin my explanation of the parts of a
+microprocessor with a stripped down 6800:
+
++- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+|MPU                                                                    |
+           +---------------------+            Fetch     Execute
+|  |-------|Arithmetic Logic Unit|<====||     Control   Control         |
+   |       |        (ALU)        |     ||      ^^^^     ^^^^^^^^
+|  |       +---------------------+     ||      ||||     ||||||||        |
+   |         ^     ||    /\            ||      +---------------+
+|  |         |     ||    ||            ||      |  Controller-  |        |
+   |         |     ||    ||            ||      |   Sequencer   |
+|  |         |     \/    ||            ||      +---------------+        |
+   |   Carry |  +-----------+          ||         ^ ^ ^ ^ ^ ^
+|  |  Register  |Accumulator|          ||         | | | | | |           |
+   |-->|x|<-----| xxxxxxxx  |          ||=====|| +-----------+
+|               +-----------+                 || |Instruction|          |
+                         /\                   || |  Decoder  |
+|                        ||===============||  || +-----------+          |
+                                          ||  ||      /\
+|        +---------------+                ||  ||      ||                |
+         |Program Counter|                \/  ||      ||
+|        |    xxxxxxxx   |<=====||        +-------------+               |
+         +---------------+      ||        |Data Register|
+|           ||                  ||<======>|   xxxxxxxx  |               |
+            ||                  ||        +-------------+
+|           \/                  ||                                      |
+         +----------------+     ||
+|        |Address Register|     ||                                      |
+         |    xxxxxxxx    |<====||
+|        +----------------+     ||                                      |
+           ||                   ||
+|          ||                   ||                                      |
++- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+           ||                   ||
+           ||  +------------+   ||
+           ||=>|256 bytes of|<=>||
+           ||  |   Random   |   ||
+           ||  |   Access   |   ||
+           ||  |   Memory   |   ||
+           ||  |   (RAM)    |   ||
+           ||  +------------+   ||
+           ||                   ||
+           ||  +------------+   ||
+           ||=>|Input/Output|<=>||
+           ||  |    I/O     |   ||
+           ||  +------------+   ||
+
+  The ARITHMETIC LOGIC UNIT (ALU) is a circuit in the processor that performs
+all the math funtions.  It reeceives its input from the Data register or the
+Accumulator.  It can only output to the Accumulator and/or the CARRY BIT.
+
+  The ACCUMULATOR is the most versatile register in the processor.  It
+receives  all the results of any math function, and can be used to load
+information from memory.
+
+  The DATA REGISTER is a temporary storage location for anu information coming
+or going on the data bus.  This information can be an instrucrion or a piece
+of data.  If it is an instruction, it will be passed to the instruction
+decoder.  if it contains data, it is passed either to the Accumulator or
+directly to the ALU, depending on the instruction executed.
+Keep in mind that in the 68000, the data registers will have a different 
+function.  I am only using the data register here to aid my explanation.
+
+  The ADDRESS REGISTER is another temporary storage location that stores the
+address to be used by the current operation if it needs an address.  I will 
+explain this register in detail shortly.
+
+  The PROGRAM COUNTER is a register that is incremented every time a memory
+location is accessed, and so it keeps count of which instruction or byte of
+data is to be accessed next.
+
+  The INSTRUCTION DECODER will read an 8-bit operation code (OpCode), decode
+it, and then instruct the CONTROL SEQUENCER of the operation to perform.
+
+  Actually, to program the 6800, you don't even have to know that the data
+register, instruction decoder, or the control sequencer exist.  I have simply
+included them to help my explanation.
+
+
+2-3: The Memory
+~~~~~~~~~~~~~~~
+
+Here is a simple diagram to show how memory is accessed by the MPU:
+
+ |                        MPU                      |
+ |                                                 |
+ +- - - - - - - - - - - - - - - - - - - - - - - - -+
+    || Address                                 /\    Data
+    || From MPU (one way)                      || To/from MPU
+    ||                                         ||
+    ||                                         ||
+    ||                       / 8 bits \        ||
+   8-bit       +-------+    +-----------+     8-bit
+address bus    |       |--->|Location 01|   data bus
+    ||         |Address|--->|Location 02|      ||
+    ||========>|Decoder|--->|Location 03|<=====||
+               |       |--->|Location 04|
+                  ...            ...
+               |       |--->|Location FF|
+               +-------+    +-----------+
+                                 ^
+ Read/Write    +-------+         |
+command from-->|Control|---------|
+    MPU        +-------+
+
+  When the MPU wants to access a memory location, it simply needs to ask the
+memory to tell it what is stored there.  This would be very simple if there
+was only one memory location.  However, a computer with only one memory
+location (1 byte of memory) is not very efficient.  This simple computer I'm
+using in my example has 256 memory locations.  This can present a problem...
+what memory location does the MPU want to see?
+
+  The ADDRESS REGISTER will solve the problem.  When the MPU wants to see a
+memory location, it now needs to specify which location it wants to access.
+It does this by sending a 1-byte address over the address bus.  This can be
+any address between $00 and $FF (0-255).  The address is then read by the
+ADDRESS DECODER, which then decides what loaction should be opened.  The MPU
+also will specify if information should be read from the memory location into
+the data register, or if data should be written into the memory location.
+Let's look at another example:
+
+ 00000010   Address: $02                  10111010   Data to MPU: $BA
+    ||                                       /\
+    ||                       / 8 bits \      ||
+   8-bit       +-------+     +--------+     8-bit
+address bus    |       |-00->|xxxxxxxx|*  data bus
+    ||         |Address|-01->|xxxxxxxx|*     ||
+    ||========>|Decoder|-02->|10111010| <====|| Data read from here
+               |       |-03->|xxxxxxxx|*
+                  ...            ...
+               |       |-FF->|xxxxxxxx|*
+               +-------+     +--------+
+                                  ^
+               +-------+          |
+Command:Read-->|Control|----------|
+               +-------+
+
+* We don't know what values are in these memory locations
+
+  In this example, the MPU sends the value $02 over the address bus, and a
+Read command to the Read/Write controller.  Upon receiving the value, the
+address decoder opens the memory location $02 for reading.  The value ($BA) is
+then read from the memory location to the data register in the MPU.  What
+happens then depends on the instruction being executed.  Note that in this
+hypothetical computer, the address bus is only 8 bits wide (or 1 byte wide),
+and so only addresses from $00 to $FF can be accessed (%00000000 to %11111111
+or 0 to 255).  This means that a maximum of 256 memory locations can be
+accessed unless a special trick is used.
+
+  Note that in the example above, the memory location will still hold the
+value $BA after being read.  This is called nondestructive readout (NDRO)
+because the mem locaion is not cleard when it is read.
+
+  That was an example of a READ function.  Now let's look at an example of a
+WRITE function:
+
+
+ 00000011   Address: $03                  00111111   Data from MPU: $3F
+    ||                                       /\
+    ||                       / 8 bits \      ||
+   8-bit       +-------+     +--------+     8-bit
+address bus    |       |-00->|xxxxxxxx|*  data bus
+    ||         |Address|-01->|xxxxxxxx|*     ||
+    ||========>|Decoder|-02->|10111010|      ||
+               |       |-03->|00111111|<=====|| Data written here
+                  ...            ...
+               |       |-FF->|xxxxxxxx|*
+               +-------+     +--------+
+                                  ^
+               +-------+          |
+Command:Write->|Control|----------|
+               +-------+
+
+* We still don't know what values are stored in these locations.  Note that
+the value previously read is still in memory location $02
+
+  As you can see, it is basically the same with the address register.  The
+address register sends an address over the bus to the address decoder,
+specifying the memory location to be accessed.  A write command is also sent
+to the read/write control.  A value has been put into the data register (the
+value is $3F).  When the control is told to write into the memory location, it
+will take whatever value is in the data register and copy it into the memory
+location specified by the address register. (in this case, location $03)
+
+
+2-3: The FETCH-EXECUTE sequence
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The MPU executes programs in a sequence called the FETCH-EXECUTE SEQUENCE.
+Basically, what this means is that it fetches (reads) the value from memory,
+and then acts upon it.  For example, consider the instruction LDA $45.  What
+this means is "load the value $45 into the accumulator".  The LDA instruction
+has the code $86, so in a program, it would appear as:
+
+
+mem location $00:  %1000 0110  or $86 or LDA
+mem location $01:  %0100 0101  or $45
+mem location $02:  %0011 1110  or $3E or HLT
+
+You may want to examine the earlier diagram of the parts of the MPU.
+
+  First, the MPU enters its fetch stage.  In the FETCH SEQUENCE, the value $86
+is loaded into the data register.  Since the first value of a program has
+to be an instruction, the instruction decoder decodes the value and finds it
+to be the LDA istruction.  This completes the EXECUTE SEQUENCE.
+
+  Now, the value at location $01 is loaded into the data register.  This is
+the next fetch sequence.  Since the LDA instruction needs a value to be loaded
+into the accumulator, the MPU understands that this next byte in memory is a
+value, and not an instruction.  The LDA instruction tells the MPU to place the
+value into the accumulator, and so the value in the data-register (loaded from
+memory) is copied into the accumulator.  This completes the next execute
+sequence.
+
+  Now the value at location $02 is loaded into the data-register.  This is the
+next fetch sequence.  Since the LDA instruction has finished, the value in the
+data register has to be another instruction, and so the instruction decoder
+reads the instruction code.  This is found to be the HLT (or Halt)
+instruction, which simply tells the MPU to stop the fetch-execute sequence,
+thus stopping the program.
+
+  If you were to omit the HLT instruction, the MPU would carry on with the
+fetch-execute sequence and take the next value (at location $03 in this case)
+and execute it as an instruction.  And since any value could be stored there,
+you'd end up with some pretty weird results.
+
+  "LDA" is what is called a MNEMONIC, which is just a shorthand of the
+instruction.  You might question the use of mnemonics since we were only
+putting in the hex codes of the instructions (the LDA instruction has a hex
+code $86).  We were actually programming in MACHINE LANGUAGE.  This is the
+actual language that the machine understands.  However, it is hard for us to
+remember that the value $86 means LDA.  Also, it would be considerably harder
+to read and debug a program that appears like this:
+
+10000110
+01000101
+00111110
+
+  For this reason, it would be easier to write the program out either on paper
+or on a text editor in a format that you can read, such as this:
+
+LDA $45
+HLT
+
+From there, you would translate into machine language:
+
+Mnemonic    Binary value
+  LDA        1000 0110
+  $45        0100 0101
+  HLT        0011 1110
+
+  However, this is very time consuming.  For this reason, there are programs
+available called ASSEMBLERS.  Assemblers will recognize the mnemonics and
+values and will translate them into machine language for you.  I will go more
+in-depth on assemblers in a later unit.
+
+
+2-4: The Program counter
+~~~~~~~~~~~~~~~~~~~~~~~~
+  How does the MPU know where it is in a program?  one method would be to
+increment the address register after each fetch phase, but suppose it were to
+be given a command that tells it to read a value from some far location in
+memory?  Well, it would read the command, then read the next mem location,
+which contains the address of the value.  Next, the value would be put in the
+address register.  Then the MPU would load the value from that location and
+put it wherever it's supposed to go.  This is fine, but now that the address
+register has been moved far off from the main program, how is it supposed to
+get back?  This is where the PROGRAM COUNTER comes in.
+
+  The program counter is a special register that has the function of keeping
+track of where the next instruction or data is in memory.  For example, if
+your program starts at location $00, the program counter will start at $00,
+and then during each fetch sequence, will be copied into the address register
+and then incremented by 1.  If the instruction specifies a different memory
+location to be accessed, only the address register is affected.  The PC
+(program counter) is still incremented during this special fetch sequence,
+and so in the next cycle, the program will be at the right address for the
+next instruction.
+
+
+2-5: Operation of the MPU
+~~~~~~~~~~~~~~~~~~~~~~~~~
+I will now show step-by-step how parts of the MPU work together:
+
+  We'll assume the a program has been entered starting at mem location $00.
+The program is as follows:
+
+            LDA          load to accumulator
+            $07          with the value $7
+            ADD          add to the accumulator
+            $10          the value $10
+            HLT          Stop
+
+Here is how the MPU executes the program:
+
+1: The fetch sequence:
+
+1. The PC (program counter) begins with a value of $00.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000000|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|                                                     |
+|                                                     |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |xxxxxxxx|                           |xxxxxxxx|   |
+|   +--------+                           +--------+   |
+|                                                     |
++-----------------------------------------------------+
+
+            +-----------Memory------------+
+            | Address |Contents |Translate|
+            |0000 0000|1000 0110|   LDA   |
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+2. The PC value is copied into the AR (address register).
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000000|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|       ||                                            |
+|       \/                                            |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000000|                           |xxxxxxxx|   |
+|   +--------+                           +--------+   |
+|                                                     |
++-----------------------------------------------------+
+
+            +-----------Memory------------+
+            | Address |Contents |Translate|
+            |0000 0000|1000 0110|   LDA   |
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+3. The PC is incremented by 1.  Note the AR is not affected.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000001|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|                                                     |
+|                                                     |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000000|                           |xxxxxxxx|   |
+|   +--------+                           +--------+   |
+|                                                     |
++-----------------------------------------------------+
+
+            +-----------Memory------------+
+            | Address |Contents |Translate|
+            |0000 0000|1000 0110|   LDA   |
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+4. The memory is accessed with the address in the AR.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000001|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|                                                     |
+|                                                     |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000000|                           |xxxxxxxx|   |
+|   +--------+                           +--------+   |
+|      ||                                             |
++------||---------------------------------------------+
+       ||
+       ||   +-----------Memory------------+
+       ||   | Address |Contents |Translate|
+       ||==>|0000 0000|1000 0110|   LDA   |
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+5. The value at that mem location is read to the DR (data register).
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000001|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|                                                     |
+|                                                     |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000000|                           |10000110|   |
+|   +--------+                           +--------+   |
+|                                             /\      |
++---------------------------------------------||------+
+                                              ||
+            +-----------Memory------------+   ||
+            | Address |Contents |Translate|   ||
+            |0000 0000|1000 0110|   LDA   |===||
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+6. The value in the DR is given to the instruction decoder.  The instruction
+decoder decodes the instruction and informs the control-sequencer (not shown).
+The control-sequencer then begins the execute sequence.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+           LDA      |
+|                                             |       |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000001|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|                                            /\       |
+|                                            ||       |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000000|                           |10000110|   |
+|   +--------+                           +--------+   |
+|                                                     |
++-----------------------------------------------------+
+
+            +-----------Memory------------+
+            | Address |Contents |Translate|
+            |0000 0000|1000 0110|   LDA   |
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+2: The execute sequence:
+
+1. The PC is copied into the AR.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000001|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|       ||                                            |
+|       \/                                            |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000001|                           |10000110|   |
+|   +--------+                           +--------+   |
+|                                                     |
++-----------------------------------------------------+
+
+            +-----------Memory------------+
+            | Address |Contents |Translate|
+            |0000 0000|1000 0110|   LDA   |
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+2. The PC is incremented.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000010|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|                                                     |
+|                                                     |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000001|                           |10000110|   |
+|   +--------+                           +--------+   |
+|                                                     |
++-----------------------------------------------------+
+
+            +-----------Memory------------+
+            | Address |Contents |Translate|
+            |0000 0000|1000 0110|   LDA   |
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+3. The next memory location is accessed.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000010|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|                                                     |
+|                                                     |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000001|                           |10000110|   |
+|   +--------+                           +--------+   |
+|      ||                                             |
++------||---------------------------------------------+
+       ||
+       ||   +-----------Memory------------+
+       ||   | Address |Contents |Translate|
+       ||   |0000 0000|1000 0110|   LDA   |
+       ||==>|0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+4. The value at this location is copied into the DR.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | xxxxxxxx  |                    |
+|                    +-----------+                    |
+|                                                     |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|   |00000010|                          |  Decoder  | |
+|   +--------+                          +-----------+ |
+|                                                     |
+|                                                     |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|   |00000001|                           |00000111|   |
+|   +--------+                           +--------+   |
+|                                             /\      |
++---------------------------------------------||------+
+                                              ||
+            +-----------Memory------------+   ||
+            | Address |Contents |Translate|   ||
+            |0000 0000|1000 0110|   LDA   |   ||
+            |0000 0001|0000 0111|   $07   |===||
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+5. The MPU, acting on the LDA instruction, copies the value in the DR to the
+accumulator.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | 00000111  |                    |
+|                    +-----------+                    |
+|                         /\                          |
+|   +--------+            ||            +-----------+ |
+|   |   PC   |            ||            |Instruction| |
+|   |00000010|            ||            |  Decoder  | |
+|   +--------+            ||            +-----------+ |
+|                         ||                          |
+|                         ||                          |
+|   +--------+            ||             +--------+   |
+|   |   AR   |            ||             |   DR   |   |
+|   |00000001|            ||=============|00000111|   |
+|   +--------+                           +--------+   |
+|                                                     |
++-----------------------------------------------------+
+
+            +-----------Memory------------+
+            | Address |Contents |Translate|
+            |0000 0000|1000 0110|   LDA   |
+            |0000 0001|0000 0111|   $07   |
+            |0000 0010|1000 1011|   ADD   |
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+3: Fetch Cycle #2 (compressed)
+
+1. The PC is copied to the AR.
+2. The PC is incremented.
+3. The next memory location is accessed.
+4. The value in that memory location is copied to the DR.
+5. The MPU has completed the LDA instruction, so the instruction decoder
+   decodes the value in the DR as an instruction.  It is found to be the ADD
+   instruction.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|                       | ALU |                       |
+|                       +-----+                       |
+|                                                     |
+|                                                     |
+|                    +-----------+                    |
+|                    |Accumulator|                    |
+|                    | 00000111  |                    |
+|                    +-----------+           ADD      |
+|                                             |       |
+|   +--------+                          +-----------+ |
+|   |   PC   |                          |Instruction| |
+|2. |00000011|                       5. |  Decoder  | |
+|   +--------+                          +-----------+ |
+|       ||                                    /\      |
+|       \/                                    ||      |
+|   +--------+                           +--------+   |
+|   |   AR   |                           |   DR   |   |
+|1. |00000010|                           |00000111|   |
+|   +--------+                           +--------+   |
+|      ||                                     /\      |
++------||-------------------------------------||------+
+       ||                                     ||
+       ||   +-----------Memory------------+   ||
+       ||   | Address |Contents |Translate|   ||
+       ||   |0000 0000|1000 0110|   LDA   |   ||
+       ||   |0000 0001|0000 0111|   $07   |   ||
+    3. ||==>|0000 0010|1000 1011|   ADD   |===|| 4.
+            |0000 0011|0000 1010|   $10   |
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+4: Ececute Cycle #2 (compressed)
+
+1. The PC is copied to the AR.
+2. The PC is incremented.
+3. The next memory location is accessed.
+4. The value in that memory location is copied to the DR.
+5. The MPU, acting on the ADD instruction, copies the values from the DR and
+   the accumulator into the ALU.
+6. The ALU then adds the two values and places the result in the accumulator.
+
++-----------------------------------------------------+
+| MPU                   +-----+                       |
+|               ||======| ALU |<====|| 5.             |
+|               ||      +-----+     ||                |
+|               ||         /\       ||                |
+|               ||      5. ||       ||                |
+|               ||   +-----------+  ||                |
+|               ||   |Accumulator|  ||                |
+|            6. ||==>| 00010001  |  ||                |
+|                    +-----------+  ||       ADD      |
+|                                   ||        |       |
+|   +--------+                      ||  +-----------+ |
+|   |   PC   |                      ||  |Instruction| |
+|2. |00000100|                      ||  |  Decoder  | |
+|   +--------+                      ||  +-----------+ |
+|       ||                          ||                |
+|       \/                          ||                |
+|   +--------+                      ||   +--------+   |
+|   |   AR   |                      ||   |   DR   |   |
+|1. |00000011|                      ||===|00001010|   |
+|   +--------+                           +--------+   |
+|      ||                                     /\      |
++------||-------------------------------------||------+
+       ||                                     ||
+       ||   +-----------Memory------------+   ||
+       ||   | Address |Contents |Translate|   ||
+       ||   |0000 0000|1000 0110|   LDA   |   ||
+       ||   |0000 0001|0000 0111|   $07   |   ||
+       ||   |0000 0010|1000 1011|   ADD   |   ||
+    3. ||==>|0000 0011|0000 1010|   $10   |===|| 4.
+            |0000 0100|0011 1110|   HLT   |
+            +-----------------------------+
+
+
+5: The HLT (Halt) instruction is decoded in the same manner as all the others
+   are.  This instruction simply tells the MPU to stop reading from memory.
+
+
+  Although the programmer has no need to know exactly how the MPU works in
+order to program it, knowing how the computer thinks greatly facilitates
+learning how to program it.  In the next unit, we will begin basic assembly
+language porgramming.
+
+
+
+              Unit 3: Instructions and programming techniques
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Completed: 29-Jan-93
+
+  In this chapter I will discuss the different instruction types and their
+basic functions.
+
+
+3-1: Boolean Operations
+~~~~~~~~~~~~~~~~~~~~~~~
+  BOOLEAN OPERATIONS are the building blocks thhat made this computer
+possible.  In programming, they are mainly used for bit manipulation.  Each
+boolean operation has a distinct TRUTH TABLE, a table that tells what the
+operation will output for each possible combination of 2 inputs.  There are 4
+fundamental boolean functions:
+
+  The AND operation tests if both inputs are set (both bits are 1).  If they
+are, it will output 1.  Otherwise it will output 0.
+
+                       Truth Table
+                      Inputs Output
+                       A  B    C
+                       0  0    0
+                       0  1    0
+                       1  0    0
+                       1  1    1
+
+Example of an AND operation:
+                                1010 1100
+                            AND 0110 1111
+                            -------------
+                                0010 1100
+
+  The OR operation tests if either input or both inputs are set and sets its
+output accordingly.
+
+                       Truth Table
+                      Inputs Output
+                       A  B    C
+                       0  0    0
+                       0  1    1
+                       1  0    1
+                       1  1    1
+
+Example of an OR operation:
+                                1010 1100
+                             OR 0110 1111
+                             ------------
+                                1110 1111
+
+The EOR (Exclusive OR) operation sets its output if the inputs are different.
+
+                       Truth Table
+                      Inputs Output
+                       A  B    C
+                       0  0    0
+                       0  1    1
+                       1  0    1
+                       1  1    0
+
+Example of an EOR operation:
+                                1010 1100 
+                            EOR 0110 1111
+                            -------------
+                                1100 0011
+
+The NOT (or invert) operation simply inverts the input.
+
+                       Truth Table
+                       Input Output
+                         0     1
+                         1     0
+
+Example of a NOT operation:
+                            NOT 1010 1100
+                            -------------
+                                0101 0011
+
+  While these functions may not seem very useful, they are convenient bit
+manipulators.  As an example, suppose you have an 8-bit value in the
+accumulator, and for some reason, you wanted to be sure that bit 7 was set,
+but didn't want to disturb the other bits of the value.  You would use the OR
+operation to solve this:
+                         Mnemonic  Comment
+                           BLA     Blah, blah..  earlier commands that have
+                           BLA     loaded a value into the accumulator.
+                           BLA     let's say the value is 1011 0111
+                           ORA     OR accumulator
+                           $40     with value 0100 0000
+                           BLA     continue on with program, blah, blah..
+
+Here's what we have done:
+                                1011 0111
+                             OR 0100 0000
+                             ------------
+                                1111 0111
+
+  Using the OR operation, we have changed bit 7 to 1 without disturbing the
+other 7 bits.  In assembly language, such operations are sometimes necessary.
+
+
+3-2: Addressing Modes
+~~~~~~~~~~~~~~~~~~~~~
+  Instructions are most commonly classified by their ADDRESSING MODE.  An
+instruction's addressing mode determines by what means the MPU must retrieve
+or store the data.  All instructions require a certain amount of space in
+bytes and will take a certain amount of time to complete, measured in MPU
+cycles.  In programming, it is advisable to follow the general rule: The
+smaller and faster you make the program, the better the program.
+Here are the three most basic forms of adressing.  I will explain the other
+addressing methods in a later unit:
+
+
+INHERENT or IMPLIED ADDRESSING: Instructions using this addressing mode have
+                                no operand.  The operand to be used is implied
+                                by the instruction.  For example, the
+                                Increment Accumulator instruction implies that
+                                the value $1 is to be added to the
+                                accumulator.  The HLT instruction is a special
+                                case as it has no operand whatsoever.  These
+                                instructions are 1 byte long.
+
+Operation performed in Inherent or Implied Addressing Mode:
+ ------ MPU Cycle 1 ----- ------ MPU Cycle 2 -----
+|Fetch        Decode     |Execute                 |
+|Instruction  Instruction|Instruction             |
+
+
+IMMEDIATE ADDRESSING: In the sample program in the previous section, the LDA
+                      and ADD instructions were examples of Immediate
+                      Addressing.  Instructions using this addressing mode
+                      are 2 bytes long.  The first byte contains the
+                      instruction itself, while the 2nd byte contains the
+                      operand.
+
+Operation performed in Immediate Addressing Mode:
+ ------ MPU Cycle 1 ----- ------ MPU Cycle 2 -----
+|Fetch        Decode     |Obtain       Perform    |
+|Instruction  Instruction|Operand      Operation  |
+
+
+DIRECT ADDRESSING: Immediate Addressing will suit the programmer fine in
+                   small, simple programs.  However, what if you wanted to
+                   store a value in memory for later retrieval?  Inherent and
+                   Immediate addressing modes would be of no use here.  This
+                   is where Direct Addressing comes in.  An instruction using
+                   Direct Addressing is 2 bytes long.  The first byte contains
+                   the instruction, while the 2nd byte contains the ADDRESS of
+                   the operand to be used.  Here is an example:
+
+                 Mnemonic   OpCode        Comment
+                   LDA     1000 0110    Load Accumulator
+                   $04     0000 0100    with the value $04
+                   ADD     1000 1011    Add to accumulator
+                   $04     0000 0100    the value 4
+                   STA     1001 0111    Store the contents of the accumulator
+                   $F0     1111 0000    at address $F0
+
+                   The last instruction, STA, requires you to specify WHERE
+                   to store the value present in the accumulator.  With this
+                   value safely stored at $F0, you can now retrieve the value
+                   at a later time in your program like this:
+
+                 Mnemonic   OpCode        Comment
+                   LDA     1001 0110    Load Accumulator
+                   $F0     1111 0000    with the contents of address $F0
+
+                   This is where some confusion can begin.  The LDA command
+                   has been used for two different addressing modes: Immediate
+                   and Direct.  If you look closely at the opcode itself, you 
+                   can see that while the mnemonic is the same, the opcode 
+                   differs in the first half-byte.  In early versions of
+                   Motorola assembly language such as the 6800 assembly
+                   language I am using for example, many different opcodes had
+                   the same mnemonic assigned to them.  In 68000 assembly, the
+                   meanings of the opcodes are much more clear.
+
+Operation performed in Direct Addressing Mode:
+ ------ MPU Cycle 1 ----- ------ MPU Cycle 2 ----- ------ MPU Cycle 3 -----
+|Fetch        Decode     |Decode       Obtain     |Obtain       Perform    |
+|Instruction  Instruction|Address      Address    |Operand      Operation  |
+
+
+3-3: Branching
+~~~~~~~~~~~~~~
+  You are now able to write a program that will manipulate data, as well as
+store it in a safe place in memory for later retrieval.  This is fine, but
+what if you want it to respond to human intervention, or you need it to
+respond if something goes wrong in the program?  To do this, you need to
+BRANCH to another location in the program.  A branch simply means causing the
+MPU to look at a different area in memory and read its instructions from that
+point.  Branching is what gives the computer its intelligence.  Using
+branching, you can now instruct the computer to interpret an input signal and
+branch to the appropriate SUBROUTINE (a small part of a program designed for a
+specific task).
+
+  In 6800 assembly language, branching uses an addressing method called
+RELATIVE ADDRESSING, which means that the value of the operand after the
+barnch instruction will be added to the program counter.  The next instruction
+will be executed from the new address in the program counter.  As an example,
+consider this program:
+
+   Address   Contents   Mnemonic/Value   Meaning
+  0000 0000  1000 0110        LDA        Load accumulator
+  0000 0001  0000 1000        $09        with the value $09
+  0000 0010  0010 0000        BRA        Branch
+  0000 0011  0000 1011        $0B        12 bytes (ahead)
+  /////////
+  0001 0000  1000 1011        ADD        Add to accumulator
+  0001 0001  0000 0010        $02        the value $02
+  0001 0010  0011 1110        HLT        Halt
+
+  In this program, the value $09 was loaded into the accumulator.  $0B was
+then added to the program counter.  Note that the value wasn't added to the PC
+until the program had reached memory location $03, where the value to be added
+to the PC is located.  Also note that the pc always is 1 step ahead of the
+program.  In this case, the PC contained the value $04.  After adding the
+value $0B to this, the PC then contained the value $10.
+
+Consider this example:
+
+   Address   Contents   Mnemonic/Value   Meaning
+  0000 0000  1000 0110        LDA        Load Accumulator
+  0000 0001  0000 0000        $00        with value $09 (clear accumulator)
+  0000 0010  1000 1011        ADD        Add to accumulator
+  0000 0011  0000 0001        $01        the value $01
+  0000 0100  0010 0000        BRA        Branch
+  0000 0101  1111 1100       -$04        -4 bytes (backwards)
+
+  The operand for the branch instruction cantains the 2'S COMPLEMENT value
+representing -4, and so the value in the PC is reduced by 4.  At that point
+in the program, the PC will hold the value $06.  Subtracting 4 from that
+value will give it a valur of $02, returning it to the ADD instruction.
+
+  This is an example of a LOOP.  A loop is a part of a program that will be
+executed many times in succession.  This is usually used to tell the computer
+to keep doing something until certain conditions are met.  In this example,
+a continuous loop is created.  The computer will simply keep adding 1 to the
+accumulator until it is reset (turned off).
+
+  I will not go too far into detail for branching as the method of branching
+in 68000 assembly language uses a much simpler method.
+
+
+
+3-4: Conditional Branching
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+  In the last program, a loop was created by causing th program to branch back
+to an earlier address.  However, we want to make it loop until a certain
+condition is met.  For this, we need CONDITIONAL BRANCHING.
+
+  A conditional branch will tell the computer to check if the condition is
+met.  If the condition is met, the program will branch to the specified
+location.  If not, the computer will ignore the branch instruction and
+continue normally.
+
+  Some examples of conditional decisions would be:
+        -Which of these numbers is larger?
+        -Are these numbers equal?
+        -Is the number even?
+        -Is the number zero?
+        -Is the number negative?
+
+  We use conditional branching to test these and other possibilities.
+
+
+3-5: The Condition Code Register
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  All conditional branching instructions ask if certain conditions are met.
+But how is the computer to know if they were or not?  To find out, the
+CONDITION CODE REGISTER is tested.
+
+  The Condition Code Register or CCR is an 8-bit register that monitors the 
+results of operations performed and sets its individual bits, also called
+FLAGS, accordingly.
+
+       C   N   Z
+       |   |   |
+       |   |  +-----------+
+       |   |  |Zero Detect|
+       |   |  |   Logic   |
+       |   |  +-----------+
+       |   |----||||||||
+       |      +-----------+
+       |      |Accumulator|
+       |------| xxxxxxxx  |
+              +-----------+
+
+
+  The CARRY BIT (C) acts as an extra bit for the accumulator.  Consider the
+following addition:
+
+                             1100 0101
+                           + 1000 1101
+                           -----------
+                           1 0101 0010
+
+  The result of this 8-bit addition yields a 9-bit result.  The MSB of this
+operation is placed in the carry bit.  This allows for multiple precision
+addition.  The carry bit acts in a similar manner in the case of a subtract
+operation:
+
+                             0000 0001
+                           - 0000 0010
+                           -----------
+                             1111 1111  with borrow of 1
+
+  Since a borrow has occurred, the carry bit is set.  An example of 
+subtracting in this manner is the comparing of 2 values.  If the carry bit is 
+set, the first number is smaller.  Note that the C bit will only hold meaning
+if unsigned numbers are used.
+
+  The NEGATIVE BIT (N) is set if the MSB of the accumulator is set after an
+operation.  Recall that in the 2's complement system, any number with its MSB
+set is representative of a negative number(#11111111-#10000000).  If the value
+stored in the accumulator is positive, the N bit of the CCR is cleared.
+
+  The ZERO BIT (Z) is set if the result of an operation is zero.  Otherwise it
+is cleared.
+
+        V
+        |
+    +--------+
+    |Overflow|
+    | Detect |                 
+    | Logic  |                 to
+    +--------+             accumulator
+      ^ ^ ^                 ^^^^^^^^
+      | | |-----------------||||||||
+      | |            +---------------------+
+      | |            |Arithmetic Logic Unit|
+      | |            +---------------------+
+      | |-------------||||||||     ||||||||
+      |               ^^^^^^^^     ||||||||
+      |                 From       ||||||||
+      |           Address Register ||||||||
+      |----------------------------||||||||
+                                   ^^^^^^^^
+                                     From
+                                 Data Register
+
+  The OVERFLOW BIT (V) is a special flag used when adding two unsigned numbers.
+Consider this example:
+
+                        0101 1000    $58
+                      + 0100 0111  + $47
+                      -----------  -----
+                        1001 1111    $9F
+
+  In 2's complement, this number represents -$61.  This is where the overflow
+bit comes into play. if the MSB's of both operands are 0 and the MSB of the
+result after an addition is 1, then the overflow bit is set.
+
+  The INTERRUPT MASK (I) determines if the MPU will ignore certain requests
+from other devices.  This flag will be explained further at a later time.
+
+  The HALF-CARRY BIT (H) acts as a carry bit for operations involving BCD
+(Binary Coded Decimal) numbers.  However, BCD numbers are not used in the
+68000, and so I will not include them in this tutorial.
+
+The Condition Code Register: 11HINZVC
+                               ||||||-Carry/borrow
+                               |||||--Overflow
+                               ||||---Zero
+                               |||----Negative
+                               ||-----Interrupt Mask
+                               |------Half Carry
+
+The two MSB's of the Condition Code Register are not used, and are set to 1.
+
+
+3-6: Conditional Branch Instructions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here is a list of some conditional branch instructrions:
+
+    Instruction           Mnemonic  Branch Condition
+Branch if Carry Clear       BCC     C=0 (no borrow or carry occurred)
+Branch if Carry Set         BCS     C=1 (borrow or carry occurred)
+Branch if Not Equal zero    BNE     Z=0 (result is not zero)
+Branch if EQual zero        BEQ     Z=1 (result is zero)
+Branch if PLus              BPL     N=0 (result is positive)
+Branch if MInus             BMI     N=1 (result is negative)
+Branch if oVerflow Clear    BVC     V=0 (no overflow occurred)
+Branch if oVerflow Set      BVS     V=1 (overflow occurred)
+
+  This opens up many possibilities for the programmer.  An example would be
+testing if one unsigned value is larger than another.  You would simplt do
+this:
+               Flags
+    Mnemonic    NZVC  Comment
+      LDA       xxxx  Load into accumulator
+      $0F       xxxx  The value $0F
+      SUB       xxxx  Subtract from the accumulator
+      $10       xxx1  The value $10
+      BCS       xxx1  Branch if Carry Set
+      $40       xxx1  to address $40
+
+  You could then set up some method of imforming the user that the second
+value was larger.  If the C bit was cleared, then that would have meant that
+the second number was either equal or smaller.  If that were the case, you
+could test the Z bit by inserting a BEQ command.  If Z were set, the numbers
+would be equal, as subtracting a number from itself returns 0.
+
+
+3-7: The Memory Stack
+~~~~~~~~~~~~~~~~~~~~~
+  The technical definitions of a STACK is a group of temporary storage
+locations in which data can be stored and later retrieved.  While this sounds
+a lot like regular memory storage, there are a few distinct differences.
+
+  In the 6800 processor, a portion of memory is used for the stack.
+The main advantage of the stack is that the commands to access the stack are
+much smaller, requiring less bytes of instructions than regular memory access.
+This, in turn, allows for quicker execution of your program.
+
+  The 6800 stack works in a LIFO (Last In First Out) fashion.  In other
+words, whatever information was last to be PUSHED onto the stack is the first
+to be PULLED from the stack when a PULL instruction is given.  The 6800
+processor uses a MEMORY STACK, because the stack works by allocating a section
+of memory for stack storage.  Other processors may use a CASCADE STACK, which
+is a special register in the MPU used to store the stack data.  Unfortunately,
+these types of stacks have limited storage, and if more values are pushed in
+than can be stored, some information is pushed out of the bottom of the stack
+and lost.
+
+  In order to keep track of where the stack is, a STACK POINTER is used. This
+special register points to the address in memory where the stack is located.
+Examine the program below:
+
+Program: LDS#     Load Stack
+         $01      High order address to establish stack
+         $40      Low order address to establish stack
+                  Result: establish the stack at $0140
+         LDA      Load Accumulator
+         $01      with value $01
+
+Status:      Stack Pointer (SP)   Ram: $13D  $xx *
+                   $140                $13E  $xx *
+                                       $13F  $xx *
+               Accumulator             $140  $xx<--SP
+                   $01                 $141  $xx *
+
+* these values are either undefined or not important
+
+Program: PSH      Push value in accumulator onto stack
+
+Status:            (SP)           Ram: $13D  $xx
+                   $13F                $13E  $xx
+                                       $13F  $xx<--SP
+               Accumulator             $140  $01
+                   $01                 $141  $xx
+
+Program: LDA      Load Accumulator
+         $1F      with value $1F
+         PSH      Push value in accumulator onto stack
+
+Status:            (SP)           Ram: $13D  $xx
+                   $13E                $13E  $xx<--SP
+                                       $13F  $1F
+               Accumulator             $140  $01
+                   $1F                 $141  $xx
+
+  As you can see, the stack pointer is decremented by 1 after each push 
+instruction.  A pull instruction will do the exact opposite:
+
+Program: LDA      Load Accumulator
+         $FF      with value $FF (just to show the changes)
+
+Status:            (SP)           Ram: $13D  $xx
+                   $13E                $13E  $xx<--SP
+                                       $13F  $1F
+               Accumulator             $140  $01
+                   $FF                 $141  $xx
+
+Program: PUL      Pull value from top of stack
+
+Status:            (SP)           Ram: $13D  $xx
+                   $13F                $13E  $xx
+                                       $13F  $1F<--SP
+               Accumulator             $140  $01
+                   $1F                 $141  $xx
+
+  When the pull instruction is executed, the value at the top of the stack is
+copied to the accumulator.  The SP is subsequently incremented by 1.
+
+
+3-8: Interrupts
+~~~~~~~~~~~~~~~
+  Exactly what is an INTERRUPT?  We hear see this word many times when reading
+a technical manual, but I've noticed that almost none of them give an
+explanation.
+
+  An interrupt is an occurrance that requires the MPU to evaluate.  As an
+example, if you were to reset the computer, you would want it to stop doing
+whatever it was doing (perhaps running wild from some nasty program) and do a
+complete system reset.  To do this, you need to send an interrupt to the MPU.
+These interrupts are sent to the MPU via special pins on the chip, not through
+the data bus.
+
+  Upon receiving the interrupt, the MPU will call upon the ROM (Read-Only
+Memory) which will tell it how to deal with the problem.  The ROM is
+essentially a series of small programs that are permanently stored in a
+special chip in the computer.  These programs are specialized to handle almost
+any situation requiring an interrupt.  In all computers today, the ROM is
+placed at the very top of memory.
+
+Examine the following diagram:
+
+              Example Memory Map
+
+       $0000  +----------------+
+              |      RAM       |
+       $01FF  +----------------+
+              |                |
+              |Unused Addresses|
+              |                | 
+       $8000  +================+ <- Address of input device *
+              |Unused Addresses|
+       $9000  +================+ <- Address of output device *
+              |                |
+              |Unused Addresses|
+              |                |
+       $FE00  +----------------+
+              |      ROM       |
+       $FFFF  +----------------+
+
+* The input and output devices are how this computer communicates with the
+  outside world.  Input and output from these 'addresses' are relocated to
+  special input/output buffers in the computer.
+
+  In This example configuration, there are 512 bytes of RAM present
+($0000-$01FF) and a 512 byte ROM ($FE00-$FFFF).
+
+  In this ROM, the upper 8 bytes are reserved for INTERRUPT VECTORS, which are
+simply addresses that are loaded into the PC when an interrupt occurrs.
+
+              +----------------+
+       $FFF8  |  IRQ  (high)   | Interrupt Request Vector (high order address)
+              +----------------+
+       $FFF9  |  IRQ  (low)    | Interrupt Request Vector (low order address)
+              +----------------+
+       $FFFA  |  SIV  (high)   | Software Interrupt Vector (high address)
+              +----------------+
+       $FFFB  |  SIV  (low)    | Software Interrupt Vector (low address)
+              +----------------+
+       $FFFC  |  NMI  (high)   | Non-Maskable Interrupt Vector (high address)
+              +----------------+
+       $FFFD  |  NMI  (low)    | Non-Maskable Interrupt Vector (low address)
+              +----------------+
+       $FFFE  |  Reset (high)  | Reset Vector (high address)
+              +----------------+
+       $FFFF  |  Reset (low)   | Reset Vector (low address)
+              +----------------+
+
+  Let's examine the RESET Vector.  When a reset is called, the Interrupt Mask
+(I) in the Condition Code Register is set.  This stops any other devices from
+interrupting the reset.  The address register now reads the 8-bit high and low
+order addresses from areas $FFFE and $FFFF in ROM.  At this point, the PC
+contains the 16-bit address of the first instruction of the Reset handling
+program.  The MPU then resumes its fetch-execute cycle and the program is run.
+
+  To help understand Interruptions and the I bit, consider the president of a
+company.  The president is busy at work preparing a letter when the phone
+rings.  This is an interrupt.  The President then stops what he's doing and
+answers the phone.
+
+  However, if the president doesn't want to be interrupted, he will tell his
+secretary "No visitors, hold all calls."  He will then be able to work
+uninterrupted.
+
+  The Interrupt Mask works in the same way.  As shown in the diagram above,
+there are 4 types of interrupts: Interrupt Request, Software Interrupt,
+Non-maskable Interrupt, and Reset.  The Interrupt Request and the Software
+Interrupt will be ignored by the MPU if the I bit is set.  The Non-Maskable
+Interrupt and the Reset cannot be ignored under any circumstances.  It would
+be undesirable to mask out the fire alarm!
+
+
+
+  At this point, you have learned all the basics of the 6800 processor.  In
+the next unit, I will introduce the MPU you will actually be programming on:
+The 68000.
+
+** End of unit 3

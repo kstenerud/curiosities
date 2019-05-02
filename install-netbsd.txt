@@ -1,0 +1,983 @@
+Name:        NetBSD 1.1 and X11R6 Install Kit (12-Jan-96)
+Author:      Karl Stenerud (mock@res.com)
+Short:       How to install NetBSD 1.1 and X11R6 (and internet)
+Latest Copy: http://www.res.com/~mock/install-netbsd11.txt
+
+
+
+Table of Contents:
+~~~~~~~~~~~~~~~~~
+A. Disclaimer
+B. Forward
+C. Introduction
+D. Requirements
+E. Recommended Reading
+F. NetBSD Installation
+G. X11R6 Installation
+H. Making a user for yourself
+I. Compiling your own kernel
+J. Quick and dirty SLIP
+K. Unix commands for Amiga users
+L. Vi for the timid
+Z. Troubleshooting
+
+
+
+A. Disclaimer:
+~~~~~~~~~~~~~
+  Any actions taken as a result of this file are considered to be at the risk
+and responsibility of the user.  I take no responsibility for any damages
+incurred as a result of the use of this file.
+
+
+
+B. Foreward:
+~~~~~~~~~~~
+  This file is intended as a support to the relevant readme and install docs
+that come with the software mentioned within this document.  It is by no means
+a 100% replacement for existing documentation.
+
+WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING
+- WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING
+
+You should ONLY do this install if you don't mind if your harddrive should
+accidentally be erased.  (Yes it is very easy to do so unless you are CAREUL)
+In any case, MAKE A BACKUP!
+
+
+*** A few do's and dont's ***
+
+DON'T					DO
+~~~~~					~~
+just turn off your computer		use halt, reboot, or shutdown
+log in as root all the time		make a user for yourself
+
+
+
+C. Introduction:
+~~~~~~~~~~~~~~~
+  This file is designed as a step-by-step guide for the average amiga user
+(more or less) for installing NetBSD and the X Window system (X11R6) on your
+Amiga computer.  it is expeted that you know at least how to use AmigaDOS or
+how a command line interface works.  If not, you are most likely in over your
+head.
+
+  This is a quick and dirty method for installing the system.  It does a few
+things you shouldn't make a habit of doing.
+
+  All commands that must be typed in will be preceeded by cmd> , and arguments
+that you must specify are contained within angle brackets <>.  Example:
+
+	cmd> echo Hi, my name is <your-name>
+
+
+D. Requirements:
+~~~~~~~~~~~~~~
+To run NetBSD, you need at least:
+
+- A system with an FPU and MMU (020 or better)
+- 8 megs RAM (Install dox say 4 but I couldn't get it to work without 8 megs)
+- at least 100 megs of dedicated space (enough for NetBSD and X11R6)
+  I would suggest at LEAST 150 megs so you can play with new programs.
+
+
+E. Recommended Reading:
+~~~~~~~~~~~~~~~~~~~~~~
+- 386bsd.faq (posted regularly to the 386bsd newsgroup)
+- NetBSD-Amiga.faq (In NetBSD-Amiga sites listed in section F)
+- The install docs that come with NetBSD
+
+
+
+F. NetBSD Installation:
+~~~~~~~~~~~~~~~~~~~~~~
+1. Get the files you need:
+   - FTP to aminet (ftp.wustl.edu in pub/aminet) and get the following:
+
+	Get this:			From here:	Put it here:
+	~~~~~~~~			~~~~~~~~~	~~~~~~~~~~~
+	ixemul.library			dev/gcc		Libs:
+	gzip				util/pack	C:
+	gnutar				util/arc	C:
+
+   - FTP to a NetBSD-Amiga ftp site.  Here is a short list:
+
+	ftp.iastate.edu			pub/netbsd
+	ftp.eecs.umich.edu		BSD/NetBSD
+	gatekeeper.dec.com		pub/BSD/NetBSD
+	wipux2.wifo.uni-mannheim.de	pub/NetBSD
+	ftp.demon.co.uk			pub/BSD/NetBSD
+	ftp.uni-regensburg.de		pub/NetBSD
+	ftp.unit.no			pub/NetBSD
+	ftp.stacken.kth.se		pub/OS/NetBSD
+	flick.lerc.nasa.gov		pub/NetBSD
+	coombs.anu.edu.au		pub/NetBSD
+	ftp.funet.fi			pub/unix/NetBSD
+	ftp.netbsd.org			pub/NetBSD
+
+   - cd to bin-dist/1.1 and get all the files in binary, kernel, miniroot and
+     utils.  (ONLY get security if you are in the US or Canada)
+
+   - Put the util programs such as loadbsd and xstreamtodev in your C: or
+     somewhere in your path.
+
+   - I recommend the following. get them from a NetBSD-Amiga site that has
+     X11R6 (see section G: Installing X11R6):
+
+	bffs1.3
+	bffs1.4beta
+
+2. READ the INSTALL docs!
+
+
+3. Load HDToolBox and change some settings on your hd.
+
+   - Decide how big to make your partitions and make them:
+     root: about 20 megs	(this holds your system and device info)
+     user: 100-150 or more	(this is your "official" HD)
+     swap: 2-3 times your RAM	(this is your virtual mem)
+
+   * Careful! You are modifying your drive! take precautions!
+
+   - go to "Advanced Options"
+
+   For each NetBSD partition:
+    - go to "Change..." under File System
+    - Choose "Custom File System"
+    - Turn "Automount" off
+    - Turn "Custom Boot Code" of
+    - Set "Reserved Blocks" to start and end at 0
+    - Ignore "Mask" and "MaxTransfer". They are not used.
+    - set "Identifier" (dostype) according to the partition type:
+
+       root: 0x4e425207
+       swap: 0x4e425301
+       user: 0x4e425507
+
+   * Note that swap must be on the same drive as root!
+
+   Now to be sure you don't toast your drive during installation:
+    - WRITE DOWN what harddrives you have and what order HDToolBox displays
+      them in.
+    - WRITE DOWN the start and end point of each partition and its size.
+      This includes your amiga partitions.
+    - WRITE DOWN which drive/partition you put the NetBSD files on.
+    - WRITE DOWN the logical device name you gave to each NetBSD partition
+
+
+   - save settings and exit
+
+
+4. Install the miniroot filesystem:
+   - gunzip the install miniroot
+
+	cmd> gzip -d inst-11.fs.gz
+
+   * Be careful with the following step... you are overwriting a partition.
+   - use xstreamtodev to stream the install filesystem onto your swap drive.
+
+	cmd> xstreamtodev --input=inst-11.fs --rdb-name=<swap-partition>
+
+     where <swap partition> is the name you gave to the swap partition.
+   * You may also need to include --device=<driver-name> and/or
+     --unit=<SCSI-unit-number>
+   * It should print some info and ask you if you want to proceed.  If it
+     doesn't, and just quits, then there was an error (file not found or the
+     like).
+
+
+5. Boot NetBSD. You need loadbsd and netbsd files.
+
+	cmd> loadbsd -b netbsd
+
+   * ixemul.library must be in your libs: in order for netbsd to load.
+   * Make sure you do a cold boot and don't load ANYTHING before booting.
+     NetBSD.  The Amiga likes to pollute the memory.
+   * A new screen opens and diplays diagnostics stuff.
+
+   * In the diagnostics, it should show you which harddrives it found.  They
+     have the device names sd0, sd1, sd2 etc.
+   - when asked for root device, type in the device that your swap is on and
+     put a * after it.  eg: sd0*
+   * If it fails, you probably picked the wrong drive.  Just reboot.
+
+   - when asked for what shell to use, just press return.
+   - you will be asked to proceed. Type "y"
+
+   * some info on your hd will appear.  Get your hd info that you wrote
+     down earlier ready.
+
+   * NETBSD INSTALL IS ABOUT TO FORMAT PARTS OF YOUR HARDDRIVE!
+     Make SURE you have the correct information!
+
+   - type "yes" to proceed.  NetBSD will format the root partition.
+
+   * You will see the following errors:
+		newfs: ioctl (WDINFO): Invalid argument
+		newfs: /dev/rsd0a: can't rewrite disk label
+     If there are more, restart the installation.
+
+   - select the proper drive and partition for your user partition.
+     They range from sd0d and up (or sd1d, sd2d etc).
+
+   * You can tell the NetBSD partitions because they have "BSD" in the
+     line while the AmigaDos ones have Ados in the line.
+
+
+6. Install the binaries
+
+   - type:
+
+	cmd> disklabel <drive>
+
+     where <drive> is the drive (sd0 or such) your NetBSD files are on.
+   - find the partition letter corresponding to the partition you put the
+     NetBSD files on.
+   - type the following:
+
+	cmd> mkdir /mnt/ados
+	cmd> mount_ados -o rdonly /dev/<drive&partition> /mnt/ados
+
+     <drive&partition> example: sd0f
+   * This will mount the amigados partition in read-only mode
+
+   - type:
+
+	cmd> cd /mnt/ados
+
+   * This takes you to your amigados partition.
+   - cd to the dir where your NetBSD files are.
+   - Type:
+
+	cmd> Set_tmp_dir
+
+   - Use "Extract" to get the files to NetBSD side. omit the .aa etc.
+      example: Extract base11
+
+
+7. Configure your system
+
+   - Type:
+
+	cmd> cd /
+	cmd> Configure
+
+   * You will be asked to input some info about your system.
+   * In order to have internet working, I had to set my address to
+     localhost.<domain>
+     If anyone knows the right thing to put in here, let me know!
+   - type:
+
+	cmd> halt
+
+   - wait for it to say "halted", then reboot
+
+
+8. Load NetBSD in single user mode
+
+   - load NetBSD again by typing:
+
+	cmd> loadbsd netbsd
+
+   - press return when it asks what shell to use
+   - type the following:
+
+	cmd> mount -av
+	cmd> cd /dev
+	cmd> ./MAKEDEV all
+
+   * This takes awhile
+   - mount the ados partition again
+   - copy the netbsd file over:
+
+	cmd> cp /mnt/ados/<wherever>/netbsd /netbsd
+
+   * at this point there are some files you should adjust.  You can either
+     do this now using vi (see section L: Vi for the timid), or wait until
+     you have X11R6 installed and use xedit instead.
+
+   - The files you need to edit are:
+	/etc/ttys    turn off getty on the Retina display if you don't have one
+
+   - edit these files ONLY if you know what you're doing:
+	/etc/sendmail.cf  configure network related progs
+	/etc/netstart     enable/disable network programs
+
+   - set your timezone info (you can do it later):
+
+	cmd> ln -s /usr/share/zoneinfo/<whatever> /etc/localtime
+
+   * /etc/localtime starts out linked to /usr/share/zoneinfo/US/Pacific
+   - type the following:
+
+	cmd> cd /
+	cmd> umount -av
+	cmd> halt
+
+   - reboot the machine
+   * ALWAYS use the halt command before rebooting your machine!
+
+9. Load NetBSD in multiuser mode.
+
+   - type:
+
+	cmd> loadbsd -a netbsd
+
+   * if you have an A3000 and OS 3.1, type "loadbsd -c 3000 -a netbsd"
+   - log in as root
+
+You now have a functional NetBSD.
+
+* I would strongly suggest you get bffs 1.3 and bffs 1.4beta and install them
+  (1.4beta over top of 1.3) on your amiga side.  This will alow you to get
+  your kernel over to the amiga side.
+  You can get bffs at any of the sites that have X11R6 for NetBSD-Amiga.
+
+
+
+G. X11R6 Installation:
+~~~~~~~~~~~~~~~~~~~~~
+  A common mistake among X-Window newbies is to call it "X-Windows".  Believe
+it or not, many people feel very strongly about calling it by its "proper"
+name.  (Heck, they'd call it Xerox Window system if they had their way.)  So
+protect your butt from flames and call it "X11R6" (for X version 11 release 6)
+or the "X Window System".
+
+The sites that have X11R6 for NetBSD-Amiga are:
+
+	ftp.germany.eu.net	/pub/comp/amiga/NetBSD-Amiga
+	ftp.hrz.uni-kassel.de	/pub/machines/amiga/NetBSD
+	ftp.luth.se		/pub/NetBSD/NetBSD-Amiga
+	ftp.uni-augsburg.de	/pub/amiga/NetBSD
+	ftp.uni-erlangen.de	/pub/amiga/unix/NetBSD
+	ftp.uni-regensburg.de	/pub/NetBSD-Amiga/
+	ftp.uni-stuttgart.de	/pub/systems/amiga/netbsd
+	ftp.uni-trier.de	/pub/unix/systems/NetBSD-Amiga
+
+
+ 1. Look for the most current release and get the files.
+
+    - cd to contrib/X11/X11R6 and get all the files.
+      You should also get one of the following:
+
+	Xdaniver		an ECS/AGA xserver
+	Xamiga24		For RetinaZ3 users
+	Xcl			For cirrus logic cards
+
+    * Make sure you get the readme, too.
+    * While you're at it, you may want to grab a few toys from contrib/X11
+
+ 2. Boot into NetBSD (see section F, part 9 for instructions)
+
+ 3. Mount ados (instructions in section F part 6), cd to the proper dir and
+    then install the files like so:
+
+	cmd> cat <filename> | (cd / ; tar xpzf -)
+
+    * This will automagically gunzip and untar the archive to the proper dirs
+
+    * In some distributions, Xdaniver, Xamiga24, and Xcl may not be tarred
+      archives (.tar).  In this case, you will have to copy the file to
+      your bin directory and gunzip them:
+
+	cmd> cp <filename> /usr/local/X11R6/bin
+	cmd> gunzip <filename>
+
+      In this case, you may be missing 2 files necessary to start X:
+		/usr/local/X11R6/lib/X11/xdm/Xscript
+		/usr/local/X11R6/lib/X11/xinit/xserverrc
+
+      If they are missing, you can put them in by typing:
+
+	cmd> echo "X" > /usr/local/X11R6/lib/X11/xdm/Xscript
+	cmd> echo "X -mono" > /usr/local/X11R6/lib/X11/xinit/xserverrc
+
+      * If you are using Xamiga24 or Xcl, you should load X for the first
+        time in mono to be sure you don't kill your monitor. Back up your
+        original xserverrc and make a mono xserverrc:
+
+	cmd> cd /usr/local/X11R6/lib/X11/xinit
+	cmd> mv xserverrc xserverrc.bak
+	cmd> echo "X -mono" > xserverrc
+
+
+ 4. Make a softlink to your X server.
+    - First back up the old softlink and then make a new one:
+
+	cmd> cd /usr/local/X11R6/bin
+	cmd> mv X X.bak
+	cmd> ln -s <xserver> X
+
+      where <xserver> is the name of your X-Server (Xdaniver, XAmiga24 etc)
+
+
+ 5. Set up X11's lib dir
+    - back up your rc.local and add an ldconfig:
+
+	cmd> cp /etc/rc.local /etc/rc.local.bak
+	cmd> echo "ldconfig /usr/local/X11R6/lib" >> /etc/rc.local
+
+    * this will append "ldconfig /usr/local/X11R6/lib" to the end of your
+      rc.local
+
+
+ 6. Reboot NetBSD:
+
+	cmd> reboot
+
+
+ 7. Login, then Set your path by typing:
+
+	cmd> setenv PATH /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/X11R6/bin
+
+
+ 8. Start up the X Window system:
+
+	cmd> startx
+
+    * It will load fvwm (Feeble/Foobar? Virtual Window Manager)
+
+
+ 9. Load up the editor.
+    - When it finishes loading all the stuff, go to an xterminal and type:
+
+	cmd> xedit
+
+    * it will load awhile and then display the window outline.
+    - Position the window and click the left mouse button.  You will have to
+      resize the window using the sizing gadget in any of the corners.  Just
+      do it like in Workbench.
+
+
+10. Edit some configuration files
+    * The path and filename information go in the bar at the top of the
+      window.
+
+    - open and look at the following files:
+		/etc/rc
+		/etc/rc.local
+		/.profile
+		~/.login
+		~/.cshrc
+
+    - In most of these you will find a PATH setting command which will
+      include:
+	/sbin:/usr/sbin:/bin:/usr/bin
+
+    - for these, put /usr/X11R6/bin on the end in the same manner as the
+      others.
+
+    * if you are having troubles loading the manuals for X programs, you may
+      have to kludge it into action.  Load up ~/.login and add the line:
+
+		setenv MANPATH /usr/share/man:/usr/local/X11R6/man
+
+    - open /etc/ttys and turn graphics drivers on/off
+    * ttys determines which graphics drivers are active, among other things.
+      They are as follows:
+
+		ttye0			Custom Chips
+		ttye1			Retina Z2
+		ttye2			Retina Z3
+		ttye3			Cirrus Logic
+		ttye4			A2024
+
+    - open /usr/local/X11R6/lib/X11/xinit/xinitrc
+    - if you want to use twm (which takes lots of memory to run), comment out
+      the "exec fvwm" line (put a # in front of it) and uncomment the
+      "exec twm" line.
+
+    - if you are using fvwm, open /usr/local/X11R6/lib/X11/fvwm/system.fvwmrc
+    * this is your configuration file.  Refer to the documentation by loading
+      xman and looking for fvwm in section 1.  Or just type "man fvwm" from an
+      xterm. (You may have to reboot the system beore you can use man on X
+      commands)
+    * I would suggest taking a bunch of things out of "InitFuction" so that
+      you don't always have a bunch of things loading up on initial startup.
+      I personally only have GoodStuff and 1 xterm loading at startup.
+    * Be sure to edit your color selections if you don't have AGA or a gfx card
+      because you will only have 16 colors!
+
+    - you can also edit /etc/sendmail.cf and /etc/netstart to your tastes if
+      you know what you're doing.
+
+
+11. Restart NetBSD.
+    - Exit fvwm
+    - type "reboot"
+    - Reload netbsd: loadbsd -a netbsd
+    - login as root
+    - startx
+
+NetBSD and X11R6 should now be installed!  Congrats!
+
+If you have a graphics card, you should make a kernel for yourself to be sure
+the screenmodes you use won't blow up your monitor (see Section I).
+ 
+
+
+H. Making a user for yourself:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The problem with logging in as root is that you have the power to seriously
+screw up your system.  To protect against this, you should make a user for
+yourself and use su when you want to do something that requires root
+privileges.  (you would do so by typing "su root")
+
+To make a user for yourself:
+
+1. edit the password database (see Section L: "Vi for the timid" first).
+   - type:
+
+	cmd> vipw
+
+   * This file is organized in the following order:
+
+     login-name:encrypted-password:user-id:group-id:comment:home-dir:shell
+
+   - Add a user to the end of the file. ** Do not put ANYTHING in the password
+     field **
+     An example:
+
+	username::100:100:the user:/home/username:/bin/csh
+
+2. Edit /etc/groups either using vi or some other editor
+   - At the bottom of the file, add an entry for the group-id you made earlier.
+     An example:
+
+	users:*:100:
+
+   - Now add yourself to the "wheel" group.  It will normally look like this:
+
+	wheel:*:0:root
+
+     Add your username to it.
+     An example:
+
+	wheel:*:0:root,username
+
+3. Make the home directory for your user.
+   An example:
+
+	cmd> mkdir /home
+	cmd> mkdir /home/username
+	cmd> chown username:users /home/username
+
+4. Login as your new user and see if it works.
+   * It will display the message of the day (/etc/motd) if everything works.
+
+5. Set up a few final things in your home directory.
+   - Make a .login file similar to the one root.  This file is executed every
+     time you login.
+   - Copy over any rc files that you wanted from root.
+   - use chfn to set your name, office, phone and such, which people will
+     see when they finger you. (type "man chfn" for more info)
+
+* remember: you can change to root by typing "su root"
+
+
+I. Compiling your own kernel:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Get the kernel source distribution from any of the NetBSD sites in the
+   1.1 source distribution directory under ksrc11.
+
+2. Extract it with the following command:
+		cat ksrc11.?? | (cd / ; tar xz -)
+
+
+3. Define your screenmodes.
+   Yes, you can define your own screenmodes.  Just cd to /sys/arch/amiga/dev
+   and have a look at the grf sources relevant to your graphics card:
+
+		grf_cc			Custom Chips
+		grf_cl			Cirrus Logic
+		grf_cv			CyberVision
+		grf_rh			Retina Z3
+		grf_rt			Retina Z2
+		grf_ul			A2410
+
+   These are the files you will need to change in order to make your own
+   screenmodes.  If anything, you should be able to figure out what the
+   screenmodes are.  If not, then ignore this step and ask someone online
+   (after you have consulted any relevant docs).  Then you can start X in a
+   proper screenmode by editing your xserverrc like so:
+
+	X -mode <mode> -dev /dev/<device>
+
+   where <mode> is a screenmode number (0, 1, 2 etc) and <device> is your
+   graphics device (ttye0, ttye1 etc)
+
+
+4. cd /sys/arch/amiga/conf
+
+5. Make a copy of GENERIC and call it something cool.
+		cp GENERIC <your-kernel-name>
+
+6. Edit your file to customize the kernel to your tastes.
+   * If you have a RetinaZ3 and are running on an 030, you will most likely
+     have to turn on the #define RETINA_SPEED_HACK.
+
+7. Type "config <your-kernel-name>" to configure your kernel.
+
+8. Compile the kernel:
+		cd /sys/arch/amiga/compile/<your-kernel-name>
+		make depend
+		make
+
+   * A file called "netbsd" will be created.
+
+9. Go to your amiga side, copy the kernel over and try it out.  (you will need
+   bffs to do this)  If it works, boot into netbsd and copy the working netbsd
+   kernel as /netbsd
+
+
+
+J.  Quick and dirty SLIP:
+~~~~~~~~~~~~~~~~~~~~~~~~
+  This is a quick and dirty way to start up slip for those of you who really
+don't care how networking runs and just want to get on the net from the
+NetBSD side.
+
+This is the WRONG WAY to set up networking on NetBSD, but it lets you login
+via slip and use Mosaic, telnet, ftp etc.
+
+
+1. Make sure that /etc/hosts has the entry:
+	127.0.0.1	localhost localhost.<domain>
+  * example: for me.res.com, <domain> is res.com and looks like this:
+
+	127.0.0.1	localhost localhost.res.com
+
+2. Create a file /etc/resolv.conf and put in it the nameserver IP and your
+   domain name. (get them from your internet provider)
+
+  Example:
+
+	nameserver	199.60.221.1
+	domain		res.com
+
+3. Get bsddip from any of the NetBSD distribution sites.  From the NetBSD
+   directory it is in:
+		packages/src/GPLed-sources
+
+4. Compile it
+
+5. Make a dip script.  Here is a sample script:
+
+#-----------------------------8X----------------------------------------------
+# Sample dip script "mock.dip".
+# modified from the original by Joachim Bartz, <injb@sun.rz.tu-clausthal.de>.
+
+set_modem:
+	port tty00
+#your modem speed
+	speed 19200
+	get $counter 0
+
+reset_modem:
+	reset
+	wait 5 OK ERROR
+	if $errlvl ==  2  goto error_reset_modem
+	if $errlvl == -1  goto timeout
+
+	print Modem at port $port is reset.
+
+#your init string
+	init ATZ
+	print Modem init string set.
+
+dial_out:
+	inc $counter
+	print Now dialing... Try No.: $counter
+#phone number to call
+	dial 555-1234
+	wait 5 OK ERROR
+	if $errlvl ==  2  goto error_init_string
+
+dial_wait:
+	wait 60 CONNECT BUSY CARRIER DIALTONE ANSWER RINGING
+	if $errlvl ==  6  goto dial_wait
+	if $errlvl ==  5  goto dial_noanswer
+	if $errlvl ==  4  goto dial_nodialtone
+	if $errlvl ==  3  goto dial_nocarrier
+	if $errlvl ==  2  goto dial_out
+	if $errlvl == -1  goto timeout
+
+login:
+#login prompt
+	wait 10 ogin:
+	if $errlvl != 1  goto login_error
+
+#my username for login
+	send Cmock\n
+
+#password prompt
+	wait 10 assword:
+	if $errlvl != 1  goto login_error
+
+#my password
+	send Dontyouwish\n
+
+#here you might need to have it wait for a prompt and/or send a slip command
+
+#server responds with:
+#SL/IP session from (199.60.45.15) to 199.60.45.23 beginning...
+	wait 10 SL/IP session from (
+	if $errlvl != 1  goto getip_error
+	get $rmtip remote 10
+	get $locip remote 10
+
+
+	default
+
+	print Local IP ... $locip
+	print Remote IP .. $rmtip
+	print Netmask .... $netmask
+	print MTU ........ $mtu
+	print
+	print Connected!
+	print
+	wait 10 starting
+	mode CSLIP
+
+        if $errlvl == -1  goto mode_pidfileerror
+        if $errlvl !=  1  goto exit2
+        print
+        print The DIP daemon lost the carrier and the connection.
+        print Trying to build up a new one...
+        get $counter 0
+        goto dial_out
+
+mode_pidfileerror:
+        print Fatal error: "mode" returned -1 (creating pid file)
+        goto exit
+
+getip_error:
+	print Got CONNECT and login, but no IPs! Sorry...
+	print Local  IP .. $locip
+	print Remote IP .. $rmtip
+	print Netmask .... $netmask
+	print MTU ........ $mtu
+	reset
+	goto exit
+
+login_error:
+	print Got CONNECT, but no chance to log in!
+	reset
+	goto exit
+
+dial_nocarrier:
+	print Got NO CARRIER !
+	goto exit
+
+dial_nodialtone:
+	print Got NO DIALTONE !
+	goto exit
+
+dial_noanswer:
+	print Got NO ANSWER !
+	goto exit
+
+error_init_string:
+	print Error initializing the modem.
+	print Aborting dial out!
+	reset
+	goto exit
+
+error_reset_modem:
+	print Error resetting the modem at port $port .
+	goto exit
+
+timeout:
+	print Timeout or other error occurred. Sorry...
+	goto exit
+
+exit:
+	print Exiting.
+
+exit2:
+#-----------------------------8X----------------------------------------------
+
+6. Reboot your system
+
+7. Run it by typing: dip <script-name>
+
+
+
+K. Unix commands for Amiga users:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This chart shows the closest unix command to each relevant amigados command.
+(still incomplete... send me updates or changes)
+
+Addbuffers       | ?
+Alias            | alias
+Ask              | simulated using echo and read commands
+Assign           | ?
+Avail            | ?
+Binddrivers      | taken care of by kernel
+Break            | kill
+CD (change dir)  | cd
+CD (current dir) | pwd
+ChangeTaskPri    | renice
+CMD              | use input/output redirection < >
+Copy             | cp
+Date             | date
+Delete (file)    | rm
+Delete (dir)     | rmdir
+Delete (all)     | rm -r
+Dir              | ls
+Diskchange       | (umount, then mount)
+Diskcopy         | dd
+Diskdoctor       | fsck
+Echo             | echo
+Ed               | vi
+Edit             | ed
+Else             | else
+Endcli           | exit
+Endif            | sh: fi
+                 | csh: endif
+Endshell         | exit
+Endskip          | ?
+Eval             | expr
+Execute          | sh
+Failat           | ?
+Fault            | error (sort of)
+Filenote         | ?
+Format           | mkfs
+Get              | local variables are stored as $variable
+Getenv           | env variables are stored as $<variable>
+Iconx            | ?
+If               | if
+Info             | df
+Install          | ?
+Join             | cat file1 file2 >newfile
+Lab              | ?
+List             | ls -l
+Loadwb           | startx =)
+Lock             | chmod -w /dev/devicename
+Magtape          | mt
+Makedir          | mkdir
+Makelink         | ln
+More             | more
+Mount            | mount
+Newcli           | xterm &
+Newshell         | xterm &
+Path             | sh: set PATH=whatever ; export PATH
+                 | csh: setenv PATH whatever
+Prompt           | sh: set PS1=whatever ; export PS1
+                 | csh: setenv prompt=whatever
+Protect          | chmod
+Quit             | ?
+Relabel          | ?
+Remrad           | ?
+Rename           | mv
+Resident         | ?
+Run              | <command> &
+Search           | grep
+Set              | set
+Setclock         | date
+Setdate          | date
+Setenv           | setenv
+Setfont          | ?
+Setpatch         | recompile the kernal ;-)
+Skip             | goto
+Sort             | sort
+Stack            | ?
+Status           | ps -guwx
+Type             | cat
+Unalias          | unalias
+Unset            | unset
+Unsetenv         | unsetenv
+Version          | uname, file, what, ident
+Wait             | sleep
+Which            | which
+Why              | ?
+
+
+
+L. vi for the timid:
+~~~~~~~~~~~~~~~~~~~
+Contrary to popular belief, it's not very hard to learn the basics of vi.
+I've written this for those who want to use vi in a hurry.
+
+First off, I would strongly suggest you have some experience with ed for
+amigados before trying out vi.  So get out your amigados manual and learn
+some stuff about ed first.
+
+Vi is very much like ed for amigados in general feel.  One major difference,
+however, is that it has 2 distinct modes of operation: command and input.
+In ed for amigados, you'd "temporarily" enter command mode when you pressed
+the ESC key.  In vi, pressing the ESC key will also bring you command mode,
+except it will stay in command mode until you tell it to go into input mode.
+
+In both modes, you can move around with your cursor keys (or hjkl), but you
+can't do things like scroll pages or delete lines or repaint screen unless
+you enter command mode.
+
+Vi normally starts in command mode.
+
+The best way to learn the ropes is to start editing a file (an unimportant
+file, of course!) and try some stuff.  If you ever get stuck, just press the
+ESC key and type in:
+
+		:q!
+
+Which will make you quit, discarding any changes made to the file.
+
+Here are some commands to get you started:
+
+Movement (command mode):
+~~~~~~~~~~~~~~~~~~~~~~~
+hjkl		movement (or just use the arrow keys)
+^B		Back Page
+^F		Forward Page
+H		Top of text
+L		Bottom of text
+<count> G	Go to line #<count>
+
+
+Input commands (bring you into input mode):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+i		insert before cursor
+a		insert after cursor
+O		new line above (and enter input mode)
+o		new line below (and enter input mode)
+
+
+Delete (command mode):
+~~~~~~~~~~~~~~~~~~~~~
+x		delete character
+dd		delete line
+
+
+Save/Quit (command mode):
+~~~~~~~~~~~~~~~~~~~~~~~~
+:w <file>	write to <file>
+:q		quit
+:q!		quit unconditionally
+ZZ		save & quit
+
+
+Misc (command mode):
+~~~~~~~~~~~~~~~~~~~
+^R		repaint screen
+ESC		enter command mode
+
+
+If you want more commands, read the manual =)
+
+
+
+Z. Troubleshooting:
+~~~~~~~~~~~~~~~~~~
+Q. I keep getting vm_faults when I boot!
+
+A. This is usually a problem for RetinaZ3 users.  It stems from the use of
+   RETINA_SPEED_HACK in the kernel.  If you have an 030, it should be defined.
+   If you have an 040, it should NOT be defined.  See section E: Compiling
+   your own kernel.
+   If you are trying to install NetBSD and it vm_faults, then take out your
+   retina card, install NetBSD, recompile the kernel, and then put your card
+   back in.
+
+EOF

@@ -1,0 +1,25 @@
+#define USR_INBLOCK           (WM_USER+101)
+#define USR_OUTBLOCK          (WM_USER+102)
+#define WSA_ASYNC_DATA 			(WM_USER+103)
+#define USR_PLAYLOCAL			(WM_USER+104)
+#define USR_PLAYREMOTE			(WM_USER+105)
+#define WSA_ASYNC_CTL			(WM_USER+106)
+#define USR_REFRESH_LOCAL		(WM_USER+107)
+#define USR_REFRESH_REMOTE		(WM_USER+108)
+#define USR_REFRESH_BEHAVIOUR	(WM_USER+109)
+#define USR_STOP_LOCAL        (WM_USER+110)
+#define USR_PAUSE_LOCAL        (WM_USER+111)
+#define USR_RESUME_LOCAL        (WM_USER+112)
+#define USR_PAUSE_REMOTE        (WM_USER+113)
+#define USR_RESUME_REMOTE        (WM_USER+114)
+#define USR_STOP_REMOTE        (WM_USER+115)
+
+
+#define USR_MMIOM_PROC_VERSION	(WM_USER+10001)
+
+#define MAX_BUFFERS           8
+#define MSG_LEN               128
+
+
+VOID CALLBACK waveInProc(HWAVEIN, UINT, DWORD, DWORD, DWORD);
+

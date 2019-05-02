@@ -1,0 +1,12 @@
+clear
+echo Copying the application default file 'Draw' to /usr/lib/X11/app-defaults/
+cp Draw /usr/lib/X11/app-defaults/.
+echo Done...
+echo 
+echo Invoking 'make'
+make
+echo Done...
+echo
+echo Running the application './draw'
+echo
+./draw

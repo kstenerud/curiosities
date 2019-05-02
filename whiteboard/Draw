@@ -1,0 +1,90 @@
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ ! App-defaults file for draw program
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ 
+ ! Initialize the radio button menus to default to no drawing function,
+ ! initial color is black, and ensure that one item is always selected.
+
+*background:     DarkGray
+
+*None*set:       TRUE
+*radioAlwaysOne: TRUE
+*Black*set:      TRUE
+
+! Choose a reasonable default size for the drawing area.
+
+*canvas.width:  600
+*canvas.height: 480
+
+! Add mnemonics to post menu panes
+
+*File.mnemonic:            F
+*Options.mnemonic:         O
+*Colors.mnemonic:          C
+*DrawingCommands.mnemonic: P
+*Help.mnemonic:            H
+
+! Set up labels, mnemonics and accelerators for all File items
+
+*Save*labelString:      Save...
+*Save*mnemonic:         S
+*Save.accelerator:      Ctrl<Key>S
+*Save.acceleratorText:  Ctrl+S
+*Load*labelString:      Load...
+*Load*mnemonic:         L
+*Load.accelerator:      Ctrl<Key>L
+*Load.acceleratorText:  Ctrl+L
+
+*Quit.mnemonic:         Q
+*Quit.accelerator:      Ctrl<Key>q
+*Quit.acceleratorText:  Ctrl+q
+
+! Set up the Options menu to have 2 columns
+*Options*numColumns:   2
+*Options*packing:      pack_column
+*Options*orientation:  vertical
+
+! Set up labels, mnemonics and accelerators for all Options items
+
+*Clear Window*mnemonic:        W
+*Clear Window.accelerator:     Ctrl<Key>W
+*Clear Window.acceleratorText: Ctrl+W
+*Connect*mnemonic:             C
+*Connect.accelerator:          Ctrl<Key>C
+*Connect.acceleratorText:      Ctrl+C
+*Disconnect*mnemonic:          D
+*Disconnect.accelerator:       Ctrl<Key>D
+*Disconnect.acceleratorText:   Ctrl+D
+
+! Configure the DrawingCommands menu as follows:
+!       Rename the menu "Palette"
+
+*DrawingCommands.labelString: Palette 
+
+! Add nice titles for the dialogs
+
+*saveDialog_popup*title: Save To File
+*loadDialog_popup*title: Load From File
+*connectDialog_popup*title: Connect
+*reallyDisconnectDialog_popup*title: Disconnect
+*textDialog_popup*title: Add Text
+
+! Set labels for help menu
+
+*HelpOnContext.labelString:  Click For Help
+*HelpOnContext.mnemonic:     C
+
+! Provide help strings
+
+*help.text: Choose a color and a a shape from the\n\
+palette to draw a figure.
+                                                                                
+! Labels for Tear-offs
+
+*Tear-off*title: Palette
+
+
+
+
+
+
